@@ -1,10 +1,15 @@
 import Head from 'next/head';
-import { useForm, ValidationError } from '@formspree/react';
+import { useForm as useFormspree, ValidationError } from '@formspree/react';
 
 export default function Reclamos() {
-  // Toma el ID desde variable de entorno (recomendado) o ponlo directo.
+  // Toma el ID desde variable de entorno. Define uno de respaldo solo para desarrollo.
   const FORM_ID = process.env.NEXT_PUBLIC_FORM_ID || 'xxxxxxxx';
-  const [state, handleSubmit] = useForm(FORM_ID);
+  const [state, handleSubmit] = useFormspree(FORM_ID);
+
+  // Evita error de tipos: errors puede ser array u objeto
+  const hasErrors = Array.isArray(state.errors)
+    ? state.errors.length > 0
+    : !!state.errors;
 
   return (
     <>
@@ -13,7 +18,7 @@ export default function Reclamos() {
         <meta name="robots" content="noindex" />
       </Head>
 
-      <main className="container py-10">
+      <main className="container mx-auto max-w-5xl px-4 py-10">
         <h1 className="text-3xl font-bold">Libro de Reclamaciones</h1>
         <p className="mt-2 text-gray-600">
           Conforme a la Ley N.º 29571 (Código de Protección y Defensa del Consumidor) ponemos a tu
@@ -26,13 +31,16 @@ export default function Reclamos() {
             Tu reclamo/queja fue enviado correctamente. Te escribiremos al correo indicado.
           </div>
         )}
-        {state.errors?.length ? (
+        {hasErrors && (
           <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
             No pudimos enviar tu solicitud. Intenta nuevamente o escríbenos por WhatsApp.
           </div>
-        ) : null}
+        )}
 
-        <form onSubmit={handleSubmit} className="mt-8 grid gap-6 md:grid-cols-2 card p-6">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-8 grid gap-6 md:grid-cols-2 rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
+        >
           {/* --- Tipo --- */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium">Tipo de solicitud</label>
@@ -43,12 +51,12 @@ export default function Reclamos() {
                   name="tipo"
                   value="Reclamo"
                   required
-                  className="accent-pink-500"
+                  className="accent-pink-600"
                 />
                 <span>Reclamo (disconformidad sobre producto/servicio)</span>
               </label>
               <label className="flex items-center gap-2">
-                <input type="radio" name="tipo" value="Queja" className="accent-pink-500" />
+                <input type="radio" name="tipo" value="Queja" className="accent-pink-600" />
                 <span>Queja (malestar sobre atención)</span>
               </label>
             </div>
@@ -57,44 +65,82 @@ export default function Reclamos() {
           {/* --- Datos del consumidor --- */}
           <div>
             <label className="block text-sm font-medium">Nombres y apellidos</label>
-            <input name="nombre" required className="input" placeholder="Tu nombre" />
+            <input
+              name="nombre"
+              required
+              placeholder="Tu nombre"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-pink-400"
+            />
           </div>
 
           <div>
             <label className="block text-sm font-medium">Documento de identidad</label>
-            <input name="documento" required className="input" placeholder="DNI / CE" />
+            <input
+              name="documento"
+              required
+              placeholder="DNI / CE"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-pink-400"
+            />
           </div>
 
           <div>
             <label className="block text-sm font-medium">Correo electrónico</label>
-            <input type="email" name="email" required className="input" placeholder="tucorreo@mail.com" />
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="tucorreo@mail.com"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-pink-400"
+            />
             <ValidationError prefix="Email" field="email" errors={state.errors} />
           </div>
 
           <div>
             <label className="block text-sm font-medium">Teléfono</label>
-            <input name="telefono" className="input" placeholder="+51 9xx xxx xxx" />
+            <input
+              name="telefono"
+              placeholder="+51 9xx xxx xxx"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-pink-400"
+            />
           </div>
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium">Dirección</label>
-            <input name="direccion" className="input" placeholder="Calle, número, distrito, provincia" />
+            <input
+              name="direccion"
+              placeholder="Calle, número, distrito, provincia"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-pink-400"
+            />
           </div>
 
           {/* --- Datos de la compra/servicio --- */}
           <div>
             <label className="block text-sm font-medium">Fecha de compra/servicio</label>
-            <input type="date" name="fecha" className="input" />
+            <input
+              type="date"
+              name="fecha"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-pink-400"
+            />
           </div>
 
           <div>
             <label className="block text-sm font-medium">Monto reclamado (S/)</label>
-            <input type="number" step="0.01" name="monto" className="input" placeholder="0.00" />
+            <input
+              type="number"
+              step="0.01"
+              name="monto"
+              placeholder="0.00"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-pink-400"
+            />
           </div>
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium">Producto/servicio</label>
-            <input name="producto" className="input" placeholder="Ej. Stickers resistentes al agua" />
+            <input
+              name="producto"
+              placeholder="Ej. Stickers resistentes al agua"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-pink-400"
+            />
           </div>
 
           {/* --- Detalle --- */}
@@ -103,8 +149,8 @@ export default function Reclamos() {
             <textarea
               name="detalle"
               required
-              className="input min-h-[120px]"
               placeholder="Describe lo ocurrido"
+              className="min-h-[120px] w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-pink-400"
             />
           </div>
 
@@ -113,8 +159,8 @@ export default function Reclamos() {
             <textarea
               name="pedido"
               required
-              className="input min-h-[100px]"
               placeholder="¿Qué solución solicitas?"
+              className="min-h-[100px] w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-pink-400"
             />
           </div>
 
@@ -126,7 +172,7 @@ export default function Reclamos() {
           <input type="hidden" name="origen" value="PapoomArt — Web" />
 
           <div className="md:col-span-2 flex items-start gap-3 text-sm text-gray-600">
-            <input type="checkbox" required className="mt-1 accent-pink-500" />
+            <input type="checkbox" required className="mt-1 accent-pink-600" />
             <span>
               Declaro ser el titular del reclamo/queja y que la información consignada es veraz. Autorizo el
               uso de mis datos para gestionar mi solicitud.
@@ -137,7 +183,7 @@ export default function Reclamos() {
             <button
               type="submit"
               disabled={state.submitting}
-              className="btn btn-primary disabled:opacity-60"
+              className="inline-flex items-center justify-center rounded-md px-4 py-2 font-semibold bg-pink-600 text-white transition hover:opacity-90 disabled:opacity-60"
             >
               {state.submitting ? 'Enviando…' : 'Enviar reclamo/queja'}
             </button>
@@ -152,21 +198,6 @@ export default function Reclamos() {
           </div>
         </form>
       </main>
-
-      <style jsx global>{`
-        .input {
-          @apply w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-pink-400;
-        }
-        .card {
-          @apply rounded-xl border border-gray-200 bg-white shadow-sm;
-        }
-        .btn {
-          @apply inline-flex items-center justify-center rounded-md px-4 py-2 font-semibold;
-        }
-        .btn-primary {
-          @apply bg-pink-600 text-white hover:opacity-90 transition;
-        }
-      `}</style>
     </>
   );
 }
