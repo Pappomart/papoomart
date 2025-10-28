@@ -141,7 +141,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       {/* Footer */}
       <footer className="border-t bg-white mt-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-8 py-8 text-xs sm:text-sm flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <p>© {new Date().getFullYear()} PapoomArt · Lima, Peru</p>
+          <p>Â© {new Date().getFullYear()} PapoomArt Â· Lima, Peru</p>
           <p>Este sitio es un template original. No reproduce marcas, textos ni fotos de terceros.</p>
         </div>
       </footer>
