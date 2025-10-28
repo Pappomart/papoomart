@@ -1,0 +1,11 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { --brand: 32 120 255; }
+.btn { @apply inline-flex items-center justify-center rounded-md px-4 py-2 font-medium hover:opacity-90 transition; }
+.btn-primary { @apply bg-blue-600 text-white; }
+.btn-outline { @apply border border-gray-300 text-gray-800 bg-white; }
+.container { @apply max-w-7xl mx-auto px-4; }
+.card { @apply bg-white rounded-lg shadow-sm border; }

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "caja-decorativa",
+    "name": "Caja Decorativa",
+    "price": 25.0,
+    "currency": "PEN",
+    "image": "/prod-1.png",
+    "short": "Caja Decorativa Personalizada.",
+    "description": "Caja artesanal personalizada con nombre, lazo y detalles decorativos. Ideal para regalos de cumpleaños, box sorpresa o packaging de detalles especiales."
+  },
+  {
+    "id": "set-stickers-1",
+    "name": "Set Stickers",
+    "price": 18.0,
+    "currency": "PEN",
+    "image": "/prod-2.png",
+    "short": "Set de Stickers Personalizados de Cumpleaños.",
+    "description": "Pack de stickers temáticos de cumpleaños con diseños coloridos y brillantes. Ideales para decorar cajas, sobres, regalos o sorpresitas. Fabricados en vinil resistente al agua y con acabado premium."
+  },
+  {
+    "id": "caja-sorpresa",
+    "name": "Caja Sorpresa Personalizada “PapoomArt”",
+    "price": 35.0,
+    "currency": "PEN",
+    "image": "/prod-3.png",
+    "short": "Caja tipo box sorpresa decorada con papeles coloridos, cinta y etiqueta con nombre. Ideal para cumpleaños, aniversarios o detalles especiales.",
+    "description": "Nuestra Caja Sorpresa Personalizada “PapoomArt” está diseñada para regalar emoción y estilo. Hecha de cartón rígido artesanal, decorada con cintas de satén y etiquetas con nombre o mensaje especial.En su interior puede incluir pequeños obsequios, dulces o mensajes personalizados. Perfecta para celebraciones, pedidos corporativos o branding creativo.Fabricada a mano con materiales de alta calidad, cuidando cada detalle para lograr una presentación encantadora que refleja cariño y originalidad.."
+  }
+]

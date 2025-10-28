@@ -1,0 +1,17 @@
+
+export default function Sobre() {
+  return (
+    <main className="container mt-8 prose max-w-none">
+      <h1>Sobre nosotros</h1>
+      <p>Este es un demo de e‑commerce para regalos personalizados en Lima, Perú. Úsalo como base para tu marca.</p>
+      <h2>Cómo funciona</h2>
+      <ol>
+        <li>Elige tu producto del catálogo.</li>
+        <li>Indica el nombre o diseño en la nota del pedido.</li>
+        <li>Pagas por Culqi, Mercado Pago o transferencia.</li>
+        <li>Enviamos por Olva Courier o retiro en punto.</li>
+      </ol>
+      <p><strong>Nota legal:</strong> Este template no copia diseño, marca ni contenido de terceros.</p>
+    </main>
+  );
+}
