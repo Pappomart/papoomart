@@ -10,21 +10,21 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSubOpen, setMobileSubOpen] = useState(false);
 
-  // Estado del submenú en DESKTOP (abre por hover y también por click)
+  // Submenú desktop controlado por hover + click
   const [deskSubOpen, setDeskSubOpen] = useState(false);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200 shadow-sm">
-      <div className="mx-auto max-w-7xl px-4 md:px-8 flex items-center justify-between h-24 md:h-28">
-        {/* LOGO grande SIN texto */}
+      <div className="mx-auto max-w-7xl px-4 md:px-8 flex items-center justify-between h-28 md:h-32">
+        {/* LOGO MUY grande (sin texto) */}
         <Link href="/" aria-label="PapoomArt, inicio" className="flex items-center">
           <Image
-            src="/logo.png"              // asegúrate que exista public/logo.png con transparencia
+            src="/logo.png" // asegúrate que exista en /public
             alt="PapoomArt"
-            width={340}
-            height={130}
+            width={480}
+            height={180}
             priority
-            className="h-16 md:h-20 w-auto" // controla el alto visible (logo más grande)
+            className="h-24 md:h-28 w-auto"  // controla el alto visible
           />
         </Link>
 
@@ -34,7 +34,7 @@ export default function Header() {
             Bienvenidos
           </Link>
 
-          {/* Tienda con submenú (hover + click, clickeable y con z-50) */}
+          {/* Tienda con submenú (sin gap y clickeable) */}
           <div
             className="relative"
             onMouseEnter={() => setDeskSubOpen(true)}
@@ -47,14 +47,21 @@ export default function Header() {
               onClick={() => setDeskSubOpen((v) => !v)}
               className="inline-flex items-center gap-1 hover:text-pink-600 transition-colors focus:outline-none"
             >
-              Tienda <FaChevronDown className={`text-xs mt-1 transition-transform ${deskSubOpen ? "rotate-180" : ""}`} />
+              Tienda
+              <FaChevronDown
+                className={`text-xs mt-1 transition-transform ${deskSubOpen ? "rotate-180" : ""}`}
+              />
             </button>
 
+            {/* Panel del submenú */}
             <div
               role="menu"
-              className={`absolute left-0 top-full mt-3 w-[22rem] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-50
-                transition-all duration-150 
-                ${deskSubOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"}`}
+              className={`absolute left-0 top-full w-[24rem] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-50
+                transition-opacity duration-150
+                ${deskSubOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+              // mantener abierto mientras el mouse está sobre el panel
+              onMouseEnter={() => setDeskSubOpen(true)}
+              onMouseLeave={() => setDeskSubOpen(false)}
             >
               <Link href="/tienda/celebrar" role="menuitem" className="block rounded-md px-4 py-2 hover:bg-pink-50">
                 Etiquetas y tarjetas para celebrar
@@ -78,7 +85,7 @@ export default function Header() {
               name="q"
               type="search"
               placeholder="Buscar productos…"
-              className="w-64 rounded-full border border-gray-300 pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-pink-400"
+              className="w-72 rounded-full border border-gray-300 pl-10 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-pink-400"
               aria-label="Buscar productos"
             />
             <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -136,7 +143,7 @@ export default function Header() {
                 name="q"
                 type="search"
                 placeholder="Buscar productos…"
-                className="w-full rounded-lg border border-gray-300 pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-pink-400"
+                className="w-full rounded-lg border border-gray-300 pl-10 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-pink-400"
               />
               <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             </form>
