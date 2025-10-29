@@ -64,10 +64,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         </div>
       )}
 
-      {/* 🧭 Header (con logo reducido a la mitad) */}
+      {/* 🧭 Header (con logo reducido a la mitad, definido en el componente) */}
       <Header />
 
-      {/* Espaciador por header fijo */}
+      {/* Espaciador por header fijo (ajusta si cambias la altura del header) */}
       <div className="h-[8rem] md:h-[9rem]" />
 
       {/* Contenido */}
@@ -75,22 +75,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </main>
 
+      {/* Botón flotante de WhatsApp (visible en todas las páginas) */}
+      <WhatsAppButton />
+
       {/* Footer */}
       <footer className="border-t bg-white mt-16">
         <div className="mx-auto max-w-7xl px-4 md:px-8 py-8 text-xs sm:text-sm text-gray-600">
           © {new Date().getFullYear()} PapoomArt · Lima, Perú
         </div>
       </footer>
-    </div>
-  );
-  
-  return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      {/* todo tu contenido */}
-      <Component {...pageProps} />
-
-      {/* botón flotante de WhatsApp */}
-      <WhatsAppButton />
     </div>
   );
 }
