@@ -7,7 +7,7 @@ import { FaTimes } from "react-icons/fa";
 import Header from "@/components/Header";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  // Banner: siempre aparece al refrescar
+  // ✅ Banner: se puede cerrar manualmente, pero reaparece al refrescar
   const [showBanner, setShowBanner] = useState(true);
   const hideBanner = useCallback(() => setShowBanner(false), []);
 
@@ -18,11 +18,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="theme-color" content="#ffffff" />
       </Head>
 
-      {/* 🔔 Banner superior (siempre reaparece al refrescar) */}
+      {/* 🔔 Banner superior — siempre visible al refrescar */}
       {showBanner && (
         <div
           aria-label="Información de envíos"
-          className="relative bg-[#F47C6C] text-white text-center text-xs sm:text-sm py-2 px-4 font-medium"
+          className="relative bg-[#F47C6C] text-white text-center text-xs sm:text-sm py-2 px-4 font-medium z-[60]"
         >
           <div className="mx-auto max-w-7xl flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <p className="m-0 leading-tight">
@@ -32,7 +32,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             </p>
 
             <div className="flex items-center justify-center gap-2">
-              {/* Teléfono actualizado */}
+              {/* Teléfono */}
               <a
                 href="tel:+5199737487"
                 className="inline-flex items-center justify-center bg-white text-[#F47C6C] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-pink-50 transition-colors"
@@ -40,7 +40,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 +51 99737487
               </a>
 
-              {/* Correo actualizado */}
+              {/* Correo */}
               <a
                 href="mailto:papoomartperu@gmail.com"
                 className="inline-flex items-center justify-center bg-white text-[#F47C6C] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-pink-50 transition-colors"
@@ -48,6 +48,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 papoomartperu@gmail.com
               </a>
 
+              {/* Botón de cerrar */}
               <button
                 type="button"
                 onClick={hideBanner}
@@ -62,10 +63,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         </div>
       )}
 
-      {/* 🧭 Header NUEVO (fijo, muy alto) */}
+      {/* 🧭 Header (con logo reducido a la mitad) */}
       <Header />
 
-      {/* Espaciador por header fijo (ajustado al logo enorme) */}
+      {/* Espaciador por header fijo */}
       <div className="h-[8rem] md:h-[9rem]" />
 
       {/* Contenido */}

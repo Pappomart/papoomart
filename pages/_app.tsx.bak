@@ -2,27 +2,14 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import "@/styles/globals.css";
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { FaTimes } from "react-icons/fa";
 import Header from "@/components/Header";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  // Banner dismissible
+  // Banner: siempre aparece al refrescar
   const [showBanner, setShowBanner] = useState(true);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const dismissed = localStorage.getItem("pa_banner_dismissed") === "1";
-      if (dismissed) setShowBanner(false);
-    }
-  }, []);
-
-  const hideBanner = useCallback(() => {
-    setShowBanner(false);
-    try {
-      localStorage.setItem("pa_banner_dismissed", "1");
-    } catch {}
-  }, []);
+  const hideBanner = useCallback(() => setShowBanner(false), []);
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
@@ -31,7 +18,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="theme-color" content="#ffffff" />
       </Head>
 
-      {/* 🔔 Banner superior (el cliente puede ocultarlo) */}
+      {/* 🔔 Banner superior (siempre reaparece al refrescar) */}
       {showBanner && (
         <div
           aria-label="Información de envíos"
@@ -45,13 +32,20 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             </p>
 
             <div className="flex items-center justify-center gap-2">
+              {/* Teléfono actualizado */}
               <a
-                href="https://wa.me/51970928583?text=Hola%20PapoomArt!%20Quiero%20saber%20m%C3%A1s%20sobre%20los%20env%C3%ADos%20y%20pedidos%20personalizados."
-                target="_blank"
-                rel="noopener noreferrer"
+                href="tel:+5199737487"
                 className="inline-flex items-center justify-center bg-white text-[#F47C6C] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-pink-50 transition-colors"
               >
-                Contactar
+                +51 99737487
+              </a>
+
+              {/* Correo actualizado */}
+              <a
+                href="mailto:papoomartperu@gmail.com"
+                className="inline-flex items-center justify-center bg-white text-[#F47C6C] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-pink-50 transition-colors"
+              >
+                papoomartperu@gmail.com
               </a>
 
               <button
@@ -68,11 +62,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         </div>
       )}
 
-      {/* 🧭 Header NUEVO (fijo) */}
+      {/* 🧭 Header NUEVO (fijo, muy alto) */}
       <Header />
 
-      {/* 🧱 Espaciador por header fijo (ajustado al logo grande) */}
-      <div className="h-24 md:h-28" />
+      {/* Espaciador por header fijo (ajustado al logo enorme) */}
+      <div className="h-[8rem] md:h-[9rem]" />
 
       {/* Contenido */}
       <main className="mx-auto max-w-7xl px-4 md:px-8">
