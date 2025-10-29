@@ -71,8 +71,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       {/* 🧭 Header NUEVO (fijo) */}
       <Header />
 
-      {/* Espaciador por header fijo (ajusta si cambias la altura del header) */}
-      <div className="h-20" />
+      {/* 🧱 Espaciador por header fijo (ajustado al logo grande) */}
+      <div className="h-24 md:h-28" />
 
       {/* Contenido */}
       <main className="mx-auto max-w-7xl px-4 md:px-8">
