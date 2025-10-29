@@ -82,9 +82,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* === BENEFICIOS (justo debajo de Favoritos) === */}
+        {/* === BENEFICIOS (debajo de Favoritos) === */}
         <section className="relative mt-16">
-          {/* Onda superior suave */}
           <svg className="absolute -top-6 left-0 w-full h-6" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
             <path fill="#E8F7DF" d="M0,32L60,26.7C120,21,240,11,360,26.7C480,43,600,85,720,90.7C840,96,960,64,1080,48C1200,32,1320,32,1380,32L1440,32L1440,0L0,0Z"/>
           </svg>
@@ -106,54 +105,72 @@ export default function Home() {
                 <div className="flex flex-col items-center">
                   <FaClock className="text-5xl text-pink-500" />
                   <h3 className="mt-4 text-2xl font-semibold text-teal-800">Tipos de envíos</h3>
-                  <p className="mt-2 text-gray-600">
-                    Lima: regular y programado. Provincias: regular/Express (≥ S/ 250).
-                  </p>
+                  <p className="mt-2 text-gray-600">Lima: regular y programado. Provincias: regular/Express (≥ S/ 250).</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Onda inferior fuerte */}
           <svg className="w-full h-8" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
             <path fill="#F24B9B" d="M0,64L60,58.7C120,53,240,43,360,58.7C480,75,600,117,720,122.7C840,128,960,96,1080,80C1200,64,1320,64,1380,64L1440,64L1440,0L0,0Z"/>
           </svg>
         </section>
 
-        {/* === FRANJA ROSA + ESTRELLAS + REDES === */}
-        <section className="relative">
-          {/* estrellas decorativas */}
-          <svg className="pointer-events-none absolute -top-6 left-0 w-40 md:w-56" viewBox="0 0 120 120" aria-hidden="true">
-            <polygon points="60,5 73,42 113,42 80,63 92,102 60,79 28,102 39,63 7,42 47,42" fill="#C7F29B" />
-          </svg>
-          <svg className="pointer-events-none absolute -bottom-10 right-0 w-44 md:w-64 rotate-12" viewBox="0 0 120 120" aria-hidden="true">
-            <polygon points="60,5 73,42 113,42 80,63 92,102 60,79 28,102 39,63 7,42 47,42" fill="#C7F29B" />
+        {/* === FRANJA DE MARCA (gradiente + nubes + luna + redes) === */}
+        <section className="relative overflow-hidden">
+          {/* ondas blancas arriba/abajo para continuidad */}
+          <svg className="w-full h-8" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+            <path fill="#ffffff" d="M0,64L60,58.7C120,53,240,43,360,58.7C480,75,600,117,720,122.7C840,128,960,96,1080,80C1200,64,1320,64,1380,64L1440,64L1440,0L0,0Z"/>
           </svg>
 
-          <div className="bg-[#F24B9B] text-white">
-            <div className="container py-12 flex flex-col items-center gap-6">
+          {/* fondo en degradado ligado a marca (rosa → coral) */}
+          <div className="relative bg-gradient-to-r from-[#F24B9B] via-[#FF6FAE] to-[#FF8CC6] text-white">
+            {/* Nubes decorativas izquierda y derecha */}
+            <svg className="absolute left-[-30px] top-1/2 -translate-y-1/2 w-64 opacity-25" viewBox="0 0 200 100" aria-hidden="true">
+              <path
+                d="M40,70 C20,70 10,60 10,50 C10,40 20,30 35,32 C40,20 55,12 70,18 C77,6 92,0 108,5 C118,0 134,4 140,16 C158,14 170,26 170,40 C170,56 156,70 136,70 Z"
+                fill="#FFFFFF"
+              />
+            </svg>
+            <svg className="absolute right-[-40px] top-1/2 -translate-y-1/2 w-72 opacity-25" viewBox="0 0 220 120" aria-hidden="true">
+              <path
+                d="M50,85 C30,85 20,74 20,64 C20,52 32,44 46,46 C52,34 70,28 86,34 C95,20 116,16 132,22 C142,16 162,22 168,36 C188,34 202,48 202,64 C202,80 186,92 164,92 Z"
+                fill="#FFFFFF"
+              />
+            </svg>
+            {/* luna sutil */}
+            <svg className="absolute right-10 top-6 w-10 opacity-60" viewBox="0 0 64 64" aria-hidden="true">
+              <defs>
+                <clipPath id="moon-cut">
+                  <circle cx="32" cy="32" r="16" />
+                </clipPath>
+              </defs>
+              <circle cx="32" cy="32" r="16" fill="#FFE9B6" />
+              <circle cx="38" cy="28" r="16" fill="#FF6FAE" clipPath="url(#moon-cut)" />
+            </svg>
+
+            {/* contenido */}
+            <div className="container py-12 flex flex-col items-center gap-6 relative">
               <h3 className="text-2xl md:text-3xl font-semibold text-center">
                 ¿Quieres compartir tu foto? Etiquétanos <span className="font-bold">@papoomart.pe</span>
               </h3>
               <div className="flex items-center gap-6 text-3xl">
-                <a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube" className="hover:opacity-80"><FaYoutube /></a>
-                <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:opacity-80"><FaInstagram /></a>
-                <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="hover:opacity-80"><FaFacebookF /></a>
-                <a href="https://tiktok.com" target="_blank" rel="noreferrer" aria-label="TikTok" className="hover:opacity-80"><FaTiktok /></a>
+                <a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube" className="hover:opacity-90"><FaYoutube /></a>
+                <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:opacity-90"><FaInstagram /></a>
+                <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="hover:opacity-90"><FaFacebookF /></a>
+                <a href="https://tiktok.com" target="_blank" rel="noreferrer" aria-label="TikTok" className="hover:opacity-90"><FaTiktok /></a>
               </div>
             </div>
           </div>
 
-          {/* Onda inferior */}
-          <svg className="w-full h-10" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
-            <path fill="#F24B9B" d="M0,64L60,58.7C120,53,240,43,360,58.7C480,75,600,117,720,122.7C840,128,960,96,1080,80C1200,64,1320,64,1380,64L1440,64L1440,0L0,0Z"/>
+          <svg className="w-full h-8" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+            <path fill="#ffffff" d="M0,64L60,58.7C120,53,240,43,360,58.7C480,75,600,117,720,122.7C840,128,960,96,1080,80C1200,64,1320,64,1380,64L1440,64L1440,0L0,0Z"/>
           </svg>
         </section>
 
         {/* === COLUMNA DE LINKS / CONTACTO / PAGOS / SUSCRIPCIÓN === */}
         <section className="bg-white">
           <div className="container py-14 grid gap-12 md:grid-cols-4">
-            {/* Consultas */}
             <div>
               <h4 className="text-xl font-semibold text-teal-800 mb-4">Consultas</h4>
               <ul className="space-y-2 text-gray-700">
@@ -163,7 +180,6 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* Sobre */}
             <div>
               <h4 className="text-xl font-semibold text-teal-800 mb-4">Sobre PapoomArt</h4>
               <ul className="space-y-2 text-gray-700">
@@ -174,7 +190,6 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* Contacto */}
             <div>
               <h4 className="text-xl font-semibold text-teal-800 mb-4">Contáctanos</h4>
               <p className="text-gray-700">+51 970 928 583</p>
@@ -186,7 +201,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Métodos de pago + suscripción */}
             <div>
               <h4 className="text-xl font-semibold text-teal-800 mb-4">Métodos de pago</h4>
               <div className="flex items-center gap-3 text-3xl text-gray-700">

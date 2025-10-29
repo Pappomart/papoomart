@@ -5,6 +5,7 @@ import "@/styles/globals.css";
 import { useState, useCallback } from "react";
 import { FaTimes } from "react-icons/fa";
 import Header from "@/components/Header";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   // ✅ Banner: se puede cerrar manualmente, pero reaparece al refrescar
@@ -80,6 +81,16 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           © {new Date().getFullYear()} PapoomArt · Lima, Perú
         </div>
       </footer>
+    </div>
+  );
+  
+  return (
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      {/* todo tu contenido */}
+      <Component {...pageProps} />
+
+      {/* botón flotante de WhatsApp */}
+      <WhatsAppButton />
     </div>
   );
 }
