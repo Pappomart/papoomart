@@ -6,6 +6,10 @@ import Image from "next/image";
 import { useState } from "react";
 import { FaBars, FaTimes, FaChevronDown, FaSearch, FaShoppingCart } from "react-icons/fa";
 
+type HeaderProps = {
+  offsetTop?: number;
+};
+
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSubOpen, setMobileSubOpen] = useState(false);
