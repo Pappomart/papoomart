@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { FaBars, FaTimes, FaSearch, FaChevronDown, FaShoppingCart } from "react-icons/fa";
 
+type Props = { offsetTop?: number };
 export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [submenuOpen, setSubmenuOpen] = useState(false);

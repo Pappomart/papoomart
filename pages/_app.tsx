@@ -8,7 +8,7 @@ import Header from "@/components/Header";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  // Banner (se puede cerrar, reaparece al refrescar)
+  // Banner (se puede cerrar; reaparece al refrescar)
   const [showBanner, setShowBanner] = useState(true);
   const hideBanner = useCallback(() => setShowBanner(false), []);
 
@@ -26,46 +26,42 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(update) : null;
     ro?.observe(el);
     window.addEventListener("resize", update);
+
     return () => {
       ro?.disconnect();
       window.removeEventListener("resize", update);
     };
   }, [showBanner]);
 
-  // ---- SEO + redes (puedes editar estos valores si cambias dominio/usuario) ----
+  // ---- SEO + redes ----
   const BRAND = {
     name: "PapoomArt",
     site: "https://papoomart.vercel.app",
     email: "papoomartperu@gmail.com",
     phoneHuman: "+51 997 374 878",
     phoneE164: "+51997374878",
-    // perfiles con el mismo @usuario
     social: {
       instagram: "https://instagram.com/PapoomArt",
-      facebook:  "https://facebook.com/PapoomArt",
-      tiktok:    "https://www.tiktok.com/@PapoomArt",
-      youtube:   "https://www.youtube.com/@PapoomArt",
+      facebook: "https://facebook.com/PapoomArt",
+      tiktok: "https://www.tiktok.com/@PapoomArt",
+      youtube: "https://www.youtube.com/@PapoomArt",
       pinterest: "https://www.pinterest.com/PapoomArt",
-      x:         "https://x.com/PapoomArt",
-      threads:   "https://www.threads.net/@PapoomArt",
-      whatsapp:  "https://wa.me/51997374878",
+      x: "https://x.com/PapoomArt",
+      threads: "https://www.threads.net/@PapoomArt",
+      whatsapp: "https://wa.me/51997374878",
     },
-    // básicos
     title: "PapoomArt — Detalles personalizados que cuentan historias",
     description:
       "Etiquetas, sellos y regalos personalizados hechos en Perú. Envíos express y atención por WhatsApp.",
-    // imagen OG de fallback (pon la tuya en /public/og.jpg si quieres)
     ogImage: "/og.jpg",
   };
-  // ---------------------------------------------------------------------------
+  // ----------------------
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#ffffff" />
-
-        {/* ---- Open Graph / X ---- */}
         <title>{BRAND.title}</title>
         <meta name="description" content={BRAND.description} />
         <meta property="og:site_name" content={BRAND.name} />
@@ -80,10 +76,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="twitter:image" content={BRAND.ogImage} />
         <meta name="twitter:site" content="@PapoomArt" />
 
-        {/* ---- JSON-LD Organization con sameAs a todas las redes ---- */}
+        {/* JSON-LD Organization + sameAs */}
         <script
           type="application/ld+json"
-          // Nota: evita saltos de línea en JSON.stringify
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
@@ -128,7 +123,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             </p>
 
             <div className="flex items-center justify-center gap-2">
-              {/* Teléfono → WhatsApp (número actualizado) */}
+              {/* Teléfono → WhatsApp */}
               <a
                 href={`${BRAND.social.whatsapp}?text=Hola%20PapoomArt!%20Quiero%20informaci%C3%B3n%20sobre%20env%C3%ADos%20y%20pedidos%20personalizados.`}
                 target="_blank"
@@ -146,7 +141,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 {BRAND.email}
               </a>
 
-              {/* Botón de cerrar */}
+              {/* Cerrar banner */}
               <button
                 type="button"
                 onClick={hideBanner}
@@ -164,7 +159,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       {/* 🧭 Header fijo desplazado por la altura del banner */}
       <Header offsetTop={bannerH} />
 
-      {/* Espaciador por header fijo (ajusta si cambias la altura del header) */}
+      {/* Espaciador por header fijo */}
       <div className="h-[8rem] md:h-[9rem]" />
 
       {/* Contenido */}
