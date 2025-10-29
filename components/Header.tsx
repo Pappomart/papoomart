@@ -19,8 +19,8 @@ export default function Header() {
           <Image
             src="/logo.png" // debe existir en /public
             alt="PapoomArt"
-            width={720}
-            height={270}
+            width={360}
+            height={130}
             priority
             className="h-48 md:h-56 w-auto" // alto visible (muy grande)
           />
