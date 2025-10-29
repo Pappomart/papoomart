@@ -4,36 +4,36 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { FaBars, FaTimes, FaChevronDown, FaSearch } from "react-icons/fa";
+import { FaBars, FaTimes, FaChevronDown, FaSearch, FaShoppingCart } from "react-icons/fa";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSubOpen, setMobileSubOpen] = useState(false);
-  const [deskSubOpen, setDeskSubOpen] = useState(false); // submenu desktop
+  const [deskSubOpen, setDeskSubOpen] = useState(false);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200 shadow-sm">
       <div className="mx-auto max-w-7xl px-4 md:px-8 flex items-center justify-between h-[8rem] md:h-[9rem]">
-        {/* LOGO (triple de tamaño) */}
-        <Link href="/sobre" aria-label="PapoomArt, inicio" className="flex items-center">
+        {/* Logo: ahora lleva a la home */}
+        <Link href="/" aria-label="Ir al inicio" className="flex items-center">
           <Image
-			  src="/logo.png"
-			  alt="PapoomArt"
-			  width={720}
-			  height={270}
-			  priority
-			  className="h-24 md:h-28 w-auto" // antes era h-48 md:h-56
-			/>
+            src="/logo.png"
+            alt="PapoomArt"
+            width={720}
+            height={270}
+            priority
+            className="h-24 md:h-28 w-auto"  // ajustado a la mitad si ya lo habías reducido
+          />
         </Link>
 
         {/* NAV DESKTOP */}
-        <nav className="hidden md:flex items-center gap-8 text-gray-800 font-medium text-lg">
+        <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-gray-800 font-medium text-lg">
           {/* Bienvenidos -> /sobre */}
           <Link href="/sobre" className="hover:text-pink-600 transition-colors">
             Bienvenidos
           </Link>
 
-          {/* Tienda con submenú estable (hover + click, sin gaps) */}
+          {/* Tienda con submenú estable (hover + click) */}
           <div
             className="relative"
             onMouseEnter={() => setDeskSubOpen(true)}
@@ -46,8 +46,7 @@ export default function Header() {
               onClick={() => setDeskSubOpen(v => !v)}
               className="inline-flex items-center gap-1 hover:text-pink-600 transition-colors focus:outline-none"
             >
-              Tienda
-              <FaChevronDown className={`text-xs mt-1 transition-transform ${deskSubOpen ? "rotate-180" : ""}`} />
+              Tienda <FaChevronDown className={`text-xs mt-1 transition-transform ${deskSubOpen ? "rotate-180" : ""}`} />
             </button>
 
             <div
@@ -75,7 +74,7 @@ export default function Header() {
           </Link>
 
           {/* Buscador */}
-          <form action="/buscar" method="GET" className="relative">
+          <form action="/buscar" method="GET" className="relative hidden lg:block">
             <input
               name="q"
               type="search"
@@ -85,6 +84,16 @@ export default function Header() {
             />
             <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </form>
+
+          {/* Carrito destacado */}
+          <Link
+            href="/carrito"
+            className="inline-flex items-center gap-2 rounded-full bg-pink-600 text-white px-4 py-2 hover:opacity-90 transition"
+            aria-label="Ir al carrito"
+          >
+            <FaShoppingCart />
+            <span className="hidden sm:inline">Carrito</span>
+          </Link>
         </nav>
 
         {/* BOTÓN MENÚ MÓVIL */}
@@ -141,6 +150,16 @@ export default function Header() {
               />
               <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             </form>
+
+            {/* Carrito móvil */}
+            <Link
+              href="/carrito"
+              onClick={() => setMobileOpen(false)}
+              className="mt-4 inline-flex items-center gap-2 rounded-lg bg-pink-600 text-white px-4 py-2 justify-center hover:opacity-90"
+            >
+              <FaShoppingCart />
+              Carrito
+            </Link>
           </nav>
         </div>
       )}

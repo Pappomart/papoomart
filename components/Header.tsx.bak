@@ -17,13 +17,13 @@ export default function Header() {
         {/* LOGO (triple de tamaño) */}
         <Link href="/sobre" aria-label="PapoomArt, inicio" className="flex items-center">
           <Image
-            src="/logo.png" // debe existir en /public
-            alt="PapoomArt"
-            width={360}
-            height={130}
-            priority
-            className="h-48 md:h-56 w-auto" // alto visible (muy grande)
-          />
+			  src="/logo.png"
+			  alt="PapoomArt"
+			  width={720}
+			  height={270}
+			  priority
+			  className="h-24 md:h-28 w-auto" // antes era h-48 md:h-56
+			/>
         </Link>
 
         {/* NAV DESKTOP */}
