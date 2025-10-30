@@ -1,6 +1,8 @@
+// pages/index.tsx
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { listProducts } from '@/lib/shop';
 import {
   FaYoutube, FaInstagram, FaFacebookF, FaTiktok,
@@ -11,6 +13,36 @@ import {
 export default function Home() {
   const products = listProducts().slice(0, 3);
 
+  // --- Newsletter state + submit ---
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    try {
+      setLoading(true);
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      if (res.ok) {
+        alert('¡Gracias por suscribirte!');
+        setEmail('');
+      } else {
+        const t = await res.text().catch(() => '');
+        alert('No pudimos procesar tu suscripción. Intenta nuevamente.\n' + (t || ''));
+      }
+    } catch (err) {
+      alert('Error de red. Revisa tu conexión e intenta otra vez.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -19,16 +51,16 @@ export default function Home() {
           name="description"
           content="PapoomArt crea papelería creativa, stickers resistentes al agua y cajas personalizadas para regalos que sí emocionan. Hecho en Perú."
         />
-        <link rel="canonical" href="https://papoomart.com/" />
+        <link rel="canonical" href="https://papoomart.vercel.app/" />
         <meta property="og:title" content="PapoomArt — Papeles creativos, stickers y cajas personalizadas" />
         <meta property="og:description" content="Stickers resistentes al agua, papeles creativos y boxes personalizados. Cotiza por WhatsApp." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://papoomart.com/" />
-        <meta property="og:image" content="https://papoomart.com/og-cover.jpg" />
+        <meta property="og:url" content="https://papoomart.vercel.app/" />
+        <meta property="og:image" content="https://papoomart.vercel.app/og-cover.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="PapoomArt — Papeles creativos, stickers y cajas personalizadas" />
         <meta name="twitter:description" content="Stickers, papeles creativos y cajas personalizadas para cada ocasión." />
-        <meta name="twitter:image" content="https://papoomart.com/og-cover.jpg" />
+        <meta name="twitter:image" content="https://papoomart.vercel.app/og-cover.jpg" />
       </Head>
 
       <main>
@@ -82,7 +114,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* === BENEFICIOS (debajo de Favoritos) === */}
+        {/* === BENEFICIOS === */}
         <section className="relative mt-16">
           <svg className="absolute -top-6 left-0 w-full h-6" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
             <path fill="#E8F7DF" d="M0,32L60,26.7C120,21,240,11,360,26.7C480,43,600,85,720,90.7C840,96,960,64,1080,48C1200,32,1320,32,1380,32L1440,32L1440,0L0,0Z"/>
@@ -116,49 +148,34 @@ export default function Home() {
           </svg>
         </section>
 
-        {/* === FRANJA DE MARCA (gradiente + nubes + luna + redes) === */}
+        {/* === FRANJA MARCA + REDES === */}
         <section className="relative overflow-hidden">
-          {/* ondas blancas arriba/abajo para continuidad */}
           <svg className="w-full h-8" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
             <path fill="#ffffff" d="M0,64L60,58.7C120,53,240,43,360,58.7C480,75,600,117,720,122.7C840,128,960,96,1080,80C1200,64,1320,64,1380,64L1440,64L1440,0L0,0Z"/>
           </svg>
 
-          {/* fondo en degradado ligado a marca (rosa → coral) */}
           <div className="relative bg-gradient-to-r from-[#F24B9B] via-[#FF6FAE] to-[#FF8CC6] text-white">
-            {/* Nubes decorativas izquierda y derecha */}
             <svg className="absolute left-[-30px] top-1/2 -translate-y-1/2 w-64 opacity-25" viewBox="0 0 200 100" aria-hidden="true">
-              <path
-                d="M40,70 C20,70 10,60 10,50 C10,40 20,30 35,32 C40,20 55,12 70,18 C77,6 92,0 108,5 C118,0 134,4 140,16 C158,14 170,26 170,40 C170,56 156,70 136,70 Z"
-                fill="#FFFFFF"
-              />
+              <path d="M40,70 C20,70 10,60 10,50 C10,40 20,30 35,32 C40,20 55,12 70,18 C77,6 92,0 108,5 C118,0 134,4 140,16 C158,14 170,26 170,40 C170,56 156,70 136,70 Z" fill="#FFFFFF" />
             </svg>
             <svg className="absolute right-[-40px] top-1/2 -translate-y-1/2 w-72 opacity-25" viewBox="0 0 220 120" aria-hidden="true">
-              <path
-                d="M50,85 C30,85 20,74 20,64 C20,52 32,44 46,46 C52,34 70,28 86,34 C95,20 116,16 132,22 C142,16 162,22 168,36 C188,34 202,48 202,64 C202,80 186,92 164,92 Z"
-                fill="#FFFFFF"
-              />
+              <path d="M50,85 C30,85 20,74 20,64 C20,52 32,44 46,46 C52,34 70,28 86,34 C95,20 116,16 132,22 C142,16 162,22 168,36 C188,34 202,48 202,64 C202,80 186,92 164,92 Z" fill="#FFFFFF" />
             </svg>
-            {/* luna sutil */}
             <svg className="absolute right-10 top-6 w-10 opacity-60" viewBox="0 0 64 64" aria-hidden="true">
-              <defs>
-                <clipPath id="moon-cut">
-                  <circle cx="32" cy="32" r="16" />
-                </clipPath>
-              </defs>
+              <defs><clipPath id="moon-cut"><circle cx="32" cy="32" r="16" /></clipPath></defs>
               <circle cx="32" cy="32" r="16" fill="#FFE9B6" />
               <circle cx="38" cy="28" r="16" fill="#FF6FAE" clipPath="url(#moon-cut)" />
             </svg>
 
-            {/* contenido */}
             <div className="container py-12 flex flex-col items-center gap-6 relative">
               <h3 className="text-2xl md:text-3xl font-semibold text-center">
-                ¿Quieres compartir tu foto? Etiquétanos <span className="font-bold">@papoomart.pe</span>
+                ¿Quieres compartir tu foto? Etiquétanos <span className="font-bold">@PapoomArt</span>
               </h3>
               <div className="flex items-center gap-6 text-3xl">
-                <a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube" className="hover:opacity-90"><FaYoutube /></a>
-                <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:opacity-90"><FaInstagram /></a>
-                <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="hover:opacity-90"><FaFacebookF /></a>
-                <a href="https://tiktok.com" target="_blank" rel="noreferrer" aria-label="TikTok" className="hover:opacity-90"><FaTiktok /></a>
+                <a href="https://www.youtube.com/@PapoomArt" target="_blank" rel="noreferrer" aria-label="YouTube" className="hover:opacity-90"><FaYoutube /></a>
+                <a href="https://instagram.com/PapoomArt" target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:opacity-90"><FaInstagram /></a>
+                <a href="https://facebook.com/PapoomArt" target="_blank" rel="noreferrer" aria-label="Facebook" className="hover:opacity-90"><FaFacebookF /></a>
+                <a href="https://www.tiktok.com/@PapoomArt" target="_blank" rel="noreferrer" aria-label="TikTok" className="hover:opacity-90"><FaTiktok /></a>
               </div>
             </div>
           </div>
@@ -192,12 +209,12 @@ export default function Home() {
 
             <div>
               <h4 className="text-xl font-semibold text-teal-800 mb-4">Contáctanos</h4>
-              <p className="text-gray-700">+51 970 928 583</p>
+              <p className="text-gray-700">+51 997 374 878</p>
               <p className="text-gray-700">papoomartperu@gmail.com</p>
               <div className="flex items-center gap-4 mt-4 text-2xl text-gray-700">
-                <a href="https://instagram.com" aria-label="Instagram" className="hover:text-pink-600"><FaInstagram /></a>
-                <a href="https://facebook.com" aria-label="Facebook" className="hover:text-pink-600"><FaFacebookF /></a>
-                <a href="https://tiktok.com" aria-label="TikTok" className="hover:text-pink-600"><FaTiktok /></a>
+                <a href="https://instagram.com/PapoomArt" aria-label="Instagram" className="hover:text-pink-600"><FaInstagram /></a>
+                <a href="https://facebook.com/PapoomArt" aria-label="Facebook" className="hover:text-pink-600"><FaFacebookF /></a>
+                <a href="https://www.tiktok.com/@PapoomArt" aria-label="TikTok" className="hover:text-pink-600"><FaTiktok /></a>
               </div>
             </div>
 
@@ -210,21 +227,21 @@ export default function Home() {
               </div>
 
               <h4 className="text-xl font-semibold text-teal-800 mt-8 mb-3">Suscríbete al club</h4>
-              <form
-                className="space-y-3"
-                onSubmit={(e) => { e.preventDefault(); alert('¡Gracias por suscribirte!'); }}
-              >
+              <form className="space-y-3" onSubmit={handleSubscribe}>
                 <input
                   type="email"
                   required
                   placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-pink-400"
                 />
                 <button
                   type="submit"
-                  className="w-full rounded-md bg-[#F24B9B] text-white font-semibold py-2 hover:opacity-90 transition"
+                  disabled={loading}
+                  className="w-full rounded-md bg-[#F24B9B] text-white font-semibold py-2 hover:opacity-90 transition disabled:opacity-60"
                 >
-                  ¡Suscríbete!
+                  {loading ? 'Enviando…' : '¡Suscríbete!'}
                 </button>
               </form>
             </div>
@@ -237,7 +254,7 @@ export default function Home() {
             <h3 className="text-xl font-semibold">¿Tienes una idea en mente?</h3>
             <p className="text-gray-600 mt-2">Escríbenos por WhatsApp para cotizar diseños a medida.</p>
             <a
-              href={`https://wa.me/51970928583?text=${encodeURIComponent('Hola PapoomArt 👋, quiero pedir stickers y cajas personalizadas!')}`}
+              href={`https://wa.me/51997374878?text=${encodeURIComponent('Hola PapoomArt 👋, quiero pedir stickers y cajas personalizadas!')}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-primary mt-4 inline-block"

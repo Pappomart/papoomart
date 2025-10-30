@@ -193,7 +193,7 @@ export default function Home() {
             <div>
               <h4 className="text-xl font-semibold text-teal-800 mb-4">Contáctanos</h4>
               <p className="text-gray-700">+51 970 928 583</p>
-              <p className="text-gray-700">ventas@papoomart.com</p>
+              <p className="text-gray-700">papoomartperu@gmail.com</p>
               <div className="flex items-center gap-4 mt-4 text-2xl text-gray-700">
                 <a href="https://instagram.com" aria-label="Instagram" className="hover:text-pink-600"><FaInstagram /></a>
                 <a href="https://facebook.com" aria-label="Facebook" className="hover:text-pink-600"><FaFacebookF /></a>
