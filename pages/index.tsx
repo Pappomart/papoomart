@@ -18,30 +18,36 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
+	  e.preventDefault();
+	  if (!email) return;
 
-    try {
-      setLoading(true);
-      const res = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
+	  try {
+		setLoading(true);
 
-      if (res.ok) {
-        alert('¡Gracias por suscribirte!');
-        setEmail('');
-      } else {
-        const t = await res.text().catch(() => '');
-        alert('No pudimos procesar tu suscripción. Intenta nuevamente.\n' + (t || ''));
-      }
-    } catch (err) {
-      alert('Error de red. Revisa tu conexión e intenta otra vez.');
-    } finally {
-      setLoading(false);
-    }
-  };
+		const res = await fetch('/api/subscribe', {
+		  method: 'POST',
+		  headers: { 'Content-Type': 'application/json' },
+		  body: JSON.stringify({ email }),
+		});
+
+		const data = await res.json().catch(() => ({} as any));
+
+		if (!res.ok) {
+		  // Muestra el mensaje concreto que envía /api/subscribe
+		  console.error('Subscribe error:', data);
+		  return alert(`No pudimos procesar tu suscripción.\n${data?.error ?? 'Error desconocido'}`);
+		}
+
+		alert('¡Listo! Te suscribiste correctamente.');
+		setEmail('');
+	  } catch (err: any) {
+		console.error(err);
+		alert('Error de red. Revisa tu conexión e intenta otra vez.');
+	  } finally {
+		setLoading(false);
+	  }
+	};
+
 
   return (
     <>

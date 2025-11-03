@@ -41,6 +41,7 @@ export default async function handler(
 
     return res.status(200).json({ ok: true });
   } catch (err: any) {
+    console.error('Resend error:', err); // ← para ver en logs de Vercel
     return res.status(500).json({ error: err?.message || 'Error enviando correo' });
   }
 }
