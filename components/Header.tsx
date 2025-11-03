@@ -197,8 +197,8 @@ export default function Header({ offsetTop = 0 }: HeaderProps) {
               <summary className="cursor-pointer select-none">Tienda</summary>
               <div className="mt-2 pl-3 flex flex-col gap-1">
                 {[
-                  { href: "/tienda/etiquetas-celebrar", label: "Pack Escolar" },
-                  { href: "/tienda/etiquetas-cole", label: "Etiquetas & Stickers" },
+                  { href: "/tienda/etiquetas-celebrar", label: "Etiquetas para celebrar" },
+                  { href: "/tienda/etiquetas-cole", label: "Etiquetas para el cole" },
                   { href: "/tienda/detalles", label: "Detalles personalizados" },
                   { href: "/tienda/corporativo", label: "Papoom Corporativo" },
                 ].map((i) => (
