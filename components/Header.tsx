@@ -51,7 +51,7 @@ export default function Header({ offsetTop = 0 }: HeaderProps) {
       img: "/mega/etiquetas.png",
     },
     {
-      href: "/tienda/detalles-personalizados"",
+      href: "/tienda/detalles-personalizados",
       title: "Detalles personalizados",
       desc: "Tazas, tomatodos y cajitas para regalar.",
       img: "/mega/detalles.png",
@@ -199,7 +199,7 @@ export default function Header({ offsetTop = 0 }: HeaderProps) {
                 {[
                   { href: "/tienda/etiquetas-celebrar", label: "Etiquetas para celebrar" },
                   { href: "/tienda/etiquetas-cole", label: "Etiquetas para el cole" },
-                  { href: "/tienda/detalles-personalizados"", label: "Detalles personalizados" },
+                  { href: "/tienda/detalles-personalizados", label: "Detalles personalizados" },
                   { href: "/tienda/corporativo", label: "Papoom Corporativo" },
                 ].map((i) => (
                   <Link key={i.href} href={i.href} onClick={() => setMenuOpen(false)}>
