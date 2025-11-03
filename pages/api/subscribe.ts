@@ -17,31 +17,45 @@ export default async function handler(
   try {
     const { email } = (req.body || {}) as { email?: string };
 
+    // ✅ Validación de email
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ error: 'Email inválido' });
     }
 
+    // ✅ A dónde enviar notificación de suscripción
     const to =
       process.env.SUBSCRIBE_TO ||
       process.env.RESEND_TO ||
       '';
 
     if (!to) {
-      return res.status(500).json({ error: 'Falta la variable de entorno SUBSCRIBE_TO' });
+      return res.status(500).json({
+        error: 'Falta la variable SUBSCRIBE_TO en Vercel'
+      });
     }
 
-    await resend.emails.send({
-      from: process.env.RESEND_FROM || 'PapoomArt <no-reply@papoomart.pe>',
+    // ✅ Enviar correo vía Resend
+    const result = await resend.emails.send({
+      from: process.env.RESEND_FROM || 'PapoomArt <onboarding@resend.dev>',
       to,
       subject: 'Nueva suscripción al club',
       text: `Nuevo suscriptor: ${email}`,
-      // ✅ En SDKs que no aceptan `reply_to`, usa `replyTo`
-      ...(email ? { replyTo: email } : {}),
+      replyTo: email,
     });
 
+    console.log('✅ Resend result:', result);
+
+    if (result.error) {
+      console.error('❌ Resend API error:', result.error);
+      return res.status(500).json({ error: result.error.message });
+    }
+
     return res.status(200).json({ ok: true });
+
   } catch (err: any) {
-    console.error('Resend error:', err); // ← para ver en logs de Vercel
-    return res.status(500).json({ error: err?.message || 'Error enviando correo' });
+    console.error('❌ Resend internal error:', err);
+    return res.status(500).json({
+      error: err?.message || 'Error enviando correo'
+    });
   }
 }
