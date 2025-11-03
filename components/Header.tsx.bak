@@ -45,7 +45,7 @@ export default function Header({ offsetTop = 0 }: HeaderProps) {
       img: "/mega/escolar.png",
     },
     {
-      href: "/tienda/etiquetas",
+      href: "/tienda/etiquetas-cole",
       title: "Etiquetas para el cole",
       desc: "Vinil resistente al agua, troquel y brillantes.",
       img: "/mega/etiquetas.png",
