@@ -1,67 +1,160 @@
-"use client";
-
+// components/Header.tsx
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-import { FaBars, FaTimes, FaSearch, FaChevronDown, FaShoppingCart } from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
+import { FiChevronDown } from "react-icons/fi";
 
-type Props = { offsetTop?: number };
-export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [submenuOpen, setSubmenuOpen] = useState(false);
+type HeaderProps = {
+  /** Altura extra (px) para empujar el header hacia abajo si hay banner */
+  offsetTop?: number;
+};
+
+export default function Header({ offsetTop = 0 }: HeaderProps) {
+  const [menuOpen, setMenuOpen] = useState(false);       // mobile nav (si lo necesitas)
+  const [tiendaOpen, setTiendaOpen] = useState(false);   // mega menu "Tienda"
+  const megaRef = useRef<HTMLDivElement | null>(null);
+
+  // Cerrar con click afuera / Escape
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (!megaRef.current) return;
+      if (!megaRef.current.contains(e.target as Node)) setTiendaOpen(false);
+    }
+    function onEsc(e: KeyboardEvent) {
+      if (e.key === "Escape") setTiendaOpen(false);
+    }
+    document.addEventListener("click", onDocClick);
+    document.addEventListener("keydown", onEsc);
+    return () => {
+      document.removeEventListener("click", onDocClick);
+      document.removeEventListener("keydown", onEsc);
+    };
+  }, []);
+
+  // Datos del submenú (4 opciones)
+  const tiendaItems: Array<{
+    href: string;
+    title: string;
+    desc: string;
+    img?: string;
+  }> = [
+    {
+      href: "/tienda/escolar",
+      title: "Pack Escolar",
+      desc: "Etiquetas de útiles, ropa y sellos personalizados.",
+      img: "/mega/escolar.png",
+    },
+    {
+      href: "/tienda/etiquetas",
+      title: "Etiquetas & Stickers",
+      desc: "Vinil resistente al agua, troquel y brillantes.",
+      img: "/mega/etiquetas.png",
+    },
+    {
+      href: "/tienda/detalles",
+      title: "Detalles personalizados",
+      desc: "Tazas, tomatodos y cajitas para regalar.",
+      img: "/mega/detalles.png",
+    },
+    {
+      href: "/tienda/corporativo",
+      title: "Papoom Corporativo",
+      desc: "Kits de bienvenida y branding para empresas.",
+      img: "/mega/corporativo.png",
+    },
+  ];
 
   return (
     <header
       className="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200 transition-all duration-200"
       style={{ top: offsetTop }}
+      ref={megaRef}
     >
-      <div className="mx-auto max-w-7xl h-24 px-4 sm:px-6 md:px-8 flex items-center justify-between">
-        {/* 🟡 LOGO (doble de tamaño) */}
-        <Link href="/" aria-label="PapoomArt, ir al inicio" className="flex items-center gap-3">
+      <div className="mx-auto max-w-7xl px-4 md:px-8 h-20 md:h-24 flex items-center justify-between gap-4">
+        {/* LOGO (doble tamaño vs. antes) */}
+        <Link href="/" className="shrink-0 flex items-center gap-2" aria-label="PapoomArt, volver al inicio">
           <Image
-            src="/logo.png"
+            src="/logo-papoomart.png"
             alt="PapoomArt"
-            width={320}    // antes 160
-            height={120}   // antes 60
+            width={220}   // antes 110 → ahora el doble
+            height={64}
             priority
-            className="h-24 w-auto md:h-28" // altura aumentada
           />
         </Link>
 
-        {/* 🟢 NAV DESKTOP */}
-        <nav className="hidden md:flex items-center gap-8 text-gray-800 text-base font-medium">
-          <Link href="/sobre" className="hover:text-pink-600 transition-colors">
+        {/* NAV */}
+        <nav className="hidden md:flex items-center gap-6 text-[15px] font-medium text-slate-800">
+          {/* Bienvenidos */}
+          <Link href="/" className="hover:text-pink-600 transition-colors">
             Bienvenidos
           </Link>
 
-          {/* Menú desplegable Tienda */}
-          <div className="relative group">
+          {/* TIENDA con mega-menu */}
+          <div
+            className="relative"
+            onMouseEnter={() => setTiendaOpen(true)}
+            onMouseLeave={() => setTiendaOpen(false)}
+          >
             <button
-              className="inline-flex items-center gap-1 hover:text-pink-600 transition-colors focus:outline-none"
               type="button"
+              className="inline-flex items-center gap-1 hover:text-pink-600 transition-colors"
+              aria-haspopup="true"
+              aria-expanded={tiendaOpen}
+              onClick={() => setTiendaOpen((v) => !v)}
             >
-              Tienda <FaChevronDown className="text-xs mt-1" />
+              Tienda
+              <FiChevronDown
+                className={`transition-transform ${tiendaOpen ? "rotate-180" : ""}`}
+              />
             </button>
 
-            <div className="absolute left-0 top-full mt-2 w-72 rounded-xl border border-gray-200 bg-white p-2 shadow-lg opacity-0 pointer-events-none transition group-hover:opacity-100 group-hover:pointer-events-auto z-50">
-              <Link
-                href="/tienda/celebrar"
-                className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
+            {/* Panel mega-menu */}
+            <div
+              className={`absolute left-1/2 -translate-x-1/2 top-full pt-3 ${
+                tiendaOpen ? "pointer-events-auto" : "pointer-events-none"
+              }`}
+            >
+              <div
+                className={`w-[92vw] max-w-5xl rounded-2xl border border-gray-200 bg-white shadow-xl transition-all duration-150 ${
+                  tiendaOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+                }`}
               >
-                Etiquetas y tarjetas para celebrar
-              </Link>
-              <Link
-                href="/tienda/escolares"
-                className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
-              >
-                Etiquetas y sellos escolares
-              </Link>
-              <Link
-                href="/tienda/regalos"
-                className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
-              >
-                Regalos personalizados
-              </Link>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-4">
+                  {tiendaItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="group rounded-xl border border-transparent hover:border-pink-200 p-4 transition-colors"
+                      onClick={() => setTiendaOpen(false)}
+                    >
+                      <div className="aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-50">
+                        {item.img ? (
+                          <Image
+                            src={item.img}
+                            alt={item.title}
+                            width={600}
+                            height={450}
+                            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-200"
+                          />
+                        ) : null}
+                      </div>
+                      <h4 className="mt-3 text-base font-semibold text-slate-900">
+                        {item.title}
+                      </h4>
+                      <p className="mt-1 text-sm text-slate-600">{item.desc}</p>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Barra inferior con atajos */}
+                <div className="border-t border-gray-200 px-4 py-3 flex flex-wrap items-center gap-3 text-sm">
+                  <Link href="/catalogo" className="text-pink-600 hover:underline" onClick={() => setTiendaOpen(false)}>Ver catálogo completo</Link>
+                  <span className="text-gray-300">•</span>
+                  <Link href="/promociones" className="text-slate-700 hover:text-pink-600" onClick={() => setTiendaOpen(false)}>Promociones</Link>
+                  <span className="text-gray-300">•</span>
+                  <Link href="/ayuda" className="text-slate-700 hover:text-pink-600" onClick={() => setTiendaOpen(false)}>Ayuda para comprar</Link>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -69,116 +162,56 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
             Promociones
           </Link>
 
-          {/* 🔵 Carrito */}
-          <Link
-            href="/carrito"
-            className="flex items-center gap-2 hover:text-pink-600 transition-colors"
-          >
-            <FaShoppingCart className="text-lg" />
-            <span>Carrito</span>
+          <Link href="/carrito" className="hover:text-pink-600 transition-colors">
+            Carrito
           </Link>
-
-          {/* Buscador */}
-          <form action="/buscar" method="GET" className="relative">
-            <input
-              name="q"
-              type="search"
-              placeholder="Buscar productos..."
-              className="w-64 rounded-full border border-gray-300 pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-pink-400"
-            />
-            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          </form>
         </nav>
 
-        {/* 🟣 BOTÓN MENÚ MÓVIL */}
+        {/* Buscador / acciones a la derecha (placeholder) */}
+        <div className="hidden md:block w-64">
+          <input
+            type="search"
+            placeholder="Buscar productos..."
+            className="w-full rounded-full border border-gray-300 px-4 py-2 text-[14px] outline-none focus:ring-2 focus:ring-pink-400"
+          />
+        </div>
+
+        {/* Botón mobile menu (opcional) */}
         <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden inline-flex items-center justify-center p-2 rounded-md border border-gray-300"
+          className="md:hidden rounded-md border px-3 py-2 text-sm"
+          onClick={() => setMenuOpen((v) => !v)}
           aria-label="Abrir menú"
         >
-          {mobileOpen ? <FaTimes /> : <FaBars />}
+          Menú
         </button>
       </div>
 
-      {/* 🔵 PANEL MÓVIL */}
-      {mobileOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
-          <nav className="flex flex-col p-4 text-gray-800">
-            <Link
-              href="/sobre"
-              onClick={() => setMobileOpen(false)}
-              className="py-2 hover:text-pink-600 transition-colors"
-            >
-              Bienvenidos
-            </Link>
+      {/* Nav mobile simple (si lo quieres) */}
+      {menuOpen && (
+        <div className="md:hidden border-t bg-white">
+          <div className="px-4 py-3 flex flex-col gap-2 text-[15px]">
+            <Link href="/" onClick={() => setMenuOpen(false)}>Bienvenidos</Link>
 
-            {/* Submenú Tienda */}
-            <div>
-              <button
-                className="w-full text-left flex justify-between items-center py-2 font-medium hover:text-pink-600"
-                onClick={() => setSubmenuOpen(!submenuOpen)}
-              >
-                Tienda
-                <FaChevronDown
-                  className={`text-xs transition-transform ${submenuOpen ? "rotate-180" : ""}`}
-                />
-              </button>
-
-              {submenuOpen && (
-                <div className="pl-4 flex flex-col gap-1">
-                  <Link
-                    href="/tienda/celebrar"
-                    onClick={() => setMobileOpen(false)}
-                    className="block py-1 text-sm hover:text-pink-600"
-                  >
-                    Etiquetas y tarjetas para celebrar
+            {/* Tienda en mobile: lista simple */}
+            <details>
+              <summary className="cursor-pointer select-none">Tienda</summary>
+              <div className="mt-2 pl-3 flex flex-col gap-1">
+                {[
+                  { href: "/tienda/escolar", label: "Pack Escolar" },
+                  { href: "/tienda/etiquetas", label: "Etiquetas & Stickers" },
+                  { href: "/tienda/detalles", label: "Detalles personalizados" },
+                  { href: "/tienda/corporativo", label: "Papoom Corporativo" },
+                ].map((i) => (
+                  <Link key={i.href} href={i.href} onClick={() => setMenuOpen(false)}>
+                    {i.label}
                   </Link>
-                  <Link
-                    href="/tienda/escolares"
-                    onClick={() => setMobileOpen(false)}
-                    className="block py-1 text-sm hover:text-pink-600"
-                  >
-                    Etiquetas y sellos escolares
-                  </Link>
-                  <Link
-                    href="/tienda/regalos"
-                    onClick={() => setMobileOpen(false)}
-                    className="block py-1 text-sm hover:text-pink-600"
-                  >
-                    Regalos personalizados
-                  </Link>
-                </div>
-              )}
-            </div>
+                ))}
+              </div>
+            </details>
 
-            <Link
-              href="/promociones"
-              onClick={() => setMobileOpen(false)}
-              className="py-2 hover:text-pink-600 transition-colors"
-            >
-              Promociones
-            </Link>
-
-            <Link
-              href="/carrito"
-              onClick={() => setMobileOpen(false)}
-              className="py-2 hover:text-pink-600 transition-colors flex items-center gap-2"
-            >
-              <FaShoppingCart className="text-lg" />
-              Carrito
-            </Link>
-
-            {/* Buscador móvil */}
-            <form action="/buscar" method="GET" className="relative mt-3">
-              <input
-                name="q"
-                type="search"
-                placeholder="Buscar productos..."
-                className="w-full rounded-lg border border-gray-300 pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-pink-400"
-              />
-              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            </form>
-          </nav>
+            <Link href="/promociones" onClick={() => setMenuOpen(false)}>Promociones</Link>
+            <Link href="/carrito" onClick={() => setMenuOpen(false)}>Carrito</Link>
+          </div>
         </div>
       )}
     </header>
