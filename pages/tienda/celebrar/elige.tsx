@@ -1,168 +1,62 @@
-// pages/etiquetas/celebrar/elige.tsx
 import Head from "next/head";
+import Link from "next/link";
 
-export default function EligeTusEtiquetas() {
+export default function EligeEtiquetas() {
+  const phone = "51997374878";
+
+  const items = [
+    { title: "Rectangulares", size: "14x5 cm" },
+    { title: "Cuadradas", size: "8.5x8.5 cm" },
+    { title: "Circulares", size: "3.5 cm" },
+    { title: "Mini stickers", size: "2x2 cm" },
+    { title: "Etiquetas grandes", size: "8x8 cm" },
+    { title: "Tags decorativos", size: "6x4 cm" },
+    { title: "Tarjetitas de agradecimiento", size: "8x4 cm" },
+    { title: "Mini rostros personalizados", size: "según foto" },
+    { title: "Tarjetones de fiesta", size: "5x3 cm" },
+  ];
+
   return (
     <>
       <Head>
-        <title>Elige tus etiquetas — PapoomArt</title>
+        <title>Elige tus etiquetas | PapoomArt</title>
         <meta
           name="description"
-          content="Selecciona solo el tipo de etiqueta que necesitas: rectangulares, cuadradas, circulares, mini stickers, tags y más."
+          content="Elige tus stickers y etiquetas personalizadas — PapoomArt"
         />
-        <link rel="canonical" href="https://papoomart.vercel.app/etiquetas/celebrar/elige" />
       </Head>
 
-      <main className="container mt-8">
-        <h1 className="text-3xl font-bold">Elige tus etiquetas</h1>
-        <p className="text-gray-600 mt-2">
-          Para clientes que solo quieren un tipo de etiqueta o reposición.
+      <main className="container mx-auto px-4 py-12">
+        <h1 className="text-3xl font-bold text-teal-800 mb-6">🏷️ Elige tus etiquetas</h1>
+
+        <p className="text-gray-600 mb-10">
+          Selecciona el tipo de etiqueta ideal para tu evento, regalo o detalle ✨
         </p>
 
-        <div className="mt-8 space-y-8">
-          {/* Rectangulares */}
-          <div className="card p-6">
-            <h2 className="text-xl font-semibold">Rectangulares</h2>
-            <p className="text-gray-600">
-              Etiquetas clásicas, perfectas para botellas, sublimes o empaques.
-            </p>
-            <p className="text-sm mt-2 text-gray-500">
-              Material: Papel fotográfico adhesivo · Tamaño: 14x5 cm
-            </p>
-            <ul className="mt-3 grid sm:grid-cols-3 gap-3 text-gray-800">
-              <li>20 unid: —</li>
-              <li>30 unid: —</li>
-              <li>50 unid: —</li>
-            </ul>
-          </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          {items.map((item, i) => (
+            <div key={i} className="bg-white rounded-xl shadow p-6 border border-gray-100">
+              <h2 className="font-semibold text-pink-600 mb-2">{item.title}</h2>
+              <p className="text-sm text-gray-600 mb-2">Tamaño estándar: {item.size}</p>
+              <p className="text-gray-500 text-sm mb-4">Material: Papel fotográfico adhesivo</p>
 
-          {/* Cuadradas */}
-          <div className="card p-6">
-            <h2 className="text-xl font-semibold">Cuadradas</h2>
-            <p className="text-gray-600">
-              Diseños modernos y simétricos, ideales para empaques y cajas de torta.
-            </p>
-            <p className="text-sm mt-2 text-gray-500">
-              Material: Papel fotográfico adhesivo · Tamaño: 8.5x8.5 cm
-            </p>
-            <ul className="mt-3 grid sm:grid-cols-3 gap-3 text-gray-800">
-              <li>20 unid: —</li>
-              <li>30 unid: —</li>
-              <li>50 unid: —</li>
-            </ul>
-          </div>
+              <a
+                href={`https://wa.me/${phone}?text=Hola%20PapoomArt!%20Quiero%20etiquetas%20${encodeURIComponent(
+                  item.title
+                )}`}
+                target="_blank"
+                className="inline-block bg-pink-600 hover:bg-pink-700 text-white font-semibold px-5 py-2 rounded-lg transition"
+              >
+                Pedir por WhatsApp
+              </a>
+            </div>
+          ))}
+        </div>
 
-          {/* Circulares */}
-          <div className="card p-6">
-            <h2 className="text-xl font-semibold">Circulares</h2>
-            <p className="text-gray-600">
-              Versátiles y adorables: multiusos, besos de moza, sorpresas, etc.
-            </p>
-            <p className="text-sm mt-2 text-gray-500">
-              Material: Papel fotográfico adhesivo · Tamaño: 3.5 cm
-            </p>
-            <ul className="mt-3 grid sm:grid-cols-3 gap-3 text-gray-800">
-              <li>20 unid: —</li>
-              <li>30 unid: —</li>
-              <li>50 unid: —</li>
-            </ul>
-          </div>
-
-          {/* Mini stickers */}
-          <div className="card p-6">
-            <h2 className="text-xl font-semibold">Mini stickers</h2>
-            <p className="text-gray-600">
-              Pequeños pero encantadores. Ideales para decorar o marcar objetos.
-            </p>
-            <p className="text-sm mt-2 text-gray-500">
-              Material: Papel fotográfico adhesivo · Tamaño: 2x2 cm
-            </p>
-            <ul className="mt-3 grid sm:grid-cols-3 gap-3 text-gray-800">
-              <li>20 unid: —</li>
-              <li>30 unid: —</li>
-              <li>50 unid: —</li>
-            </ul>
-          </div>
-
-          {/* Etiquetas grandes */}
-          <div className="card p-6">
-            <h2 className="text-xl font-semibold">Etiquetas grandes</h2>
-            <p className="text-gray-600">
-              Para destacar. Tappers, loncheras o stickers decorativos.
-            </p>
-            <p className="text-sm mt-2 text-gray-500">
-              Material: Papel fotográfico adhesivo · Tamaño: 8x8 cm
-            </p>
-            <ul className="mt-3 grid sm:grid-cols-3 gap-3 text-gray-800">
-              <li>20 unid: —</li>
-              <li>30 unid: —</li>
-              <li>50 unid: —</li>
-            </ul>
-          </div>
-
-          {/* Tags decorativos */}
-          <div className="card p-6">
-            <h2 className="text-xl font-semibold">Tags decorativos</h2>
-            <p className="text-gray-600">
-              Con o sin agujerito, listos para atar con cinta o cuerda.
-            </p>
-            <p className="text-sm mt-2 text-gray-500">
-              Material: Cartulina couché · Tamaño: 6x4 cm
-            </p>
-            <ul className="mt-3 grid sm:grid-cols-3 gap-3 text-gray-800">
-              <li>20 unid: —</li>
-              <li>30 unid: —</li>
-              <li>50 unid: —</li>
-            </ul>
-          </div>
-
-          {/* Tarjetitas de agradecimiento */}
-          <div className="card p-6">
-            <h2 className="text-xl font-semibold">Tarjetitas de agradecimiento</h2>
-            <p className="text-gray-600">
-              Ideal para acompañar pedidos y regalos. Personalizables.
-            </p>
-            <p className="text-sm mt-2 text-gray-500">
-              Material: Cartulina couché o vinil brillante · Tamaño: 8x4 cm
-            </p>
-            <ul className="mt-3 grid sm:grid-cols-3 gap-3 text-gray-800">
-              <li>20 unid: —</li>
-              <li>30 unid: —</li>
-              <li>50 unid: —</li>
-            </ul>
-          </div>
-
-          {/* Mini rostros personalizados */}
-          <div className="card p-6">
-            <h2 className="text-xl font-semibold">Mini rostros personalizados</h2>
-            <p className="text-gray-600">
-              Recorte del rostro (con gorrito, lentes o temática).
-            </p>
-            <p className="text-sm mt-2 text-gray-500">
-              Material: Cartulina o vinil brillante · Tamaño: 3x3 cm o según foto
-            </p>
-            <ul className="mt-3 grid sm:grid-cols-3 gap-3 text-gray-800">
-              <li>20 unid: —</li>
-              <li>30 unid: —</li>
-              <li>50 unid: —</li>
-            </ul>
-          </div>
-
-          {/* Tarjetones / cupones */}
-          <div className="card p-6">
-            <h2 className="text-xl font-semibold">Tarjetones o cupones de fiesta</h2>
-            <p className="text-gray-600">
-              Cada tarjetón representa un vale/pase para dulces o juegos.
-            </p>
-            <p className="text-sm mt-2 text-gray-500">
-              Material: Cartulina gruesa o vinil brillante · Tamaño: 5x3 cm
-            </p>
-            <ul className="mt-3 grid sm:grid-cols-3 gap-3 text-gray-800">
-              <li>20 unid: —</li>
-              <li>30 unid: —</li>
-              <li>50 unid: —</li>
-            </ul>
-          </div>
+        <div className="mt-10">
+          <Link href="/etiquetas/celebrar" className="text-teal-600 hover:underline">
+            ← Volver
+          </Link>
         </div>
       </main>
     </>
