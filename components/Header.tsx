@@ -39,7 +39,7 @@ export default function Header({ offsetTop = 0 }: HeaderProps) {
     img?: string;
   }> = [
     {
-      href: "/tienda/escolar",
+      href: "/tienda/etiquetas-celebrar",
       title: "Etiquetas para celebrar",
       desc: "Etiquetas de útiles, ropa y sellos personalizados.",
       img: "/mega/escolar.png",
