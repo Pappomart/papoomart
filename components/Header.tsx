@@ -40,13 +40,13 @@ export default function Header({ offsetTop = 0 }: HeaderProps) {
   }> = [
     {
       href: "/tienda/escolar",
-      title: "Pack Escolar",
+      title: "Etiquetas para celebrar",
       desc: "Etiquetas de útiles, ropa y sellos personalizados.",
       img: "/mega/escolar.png",
     },
     {
       href: "/tienda/etiquetas",
-      title: "Etiquetas & Stickers",
+      title: "Etiquetas para el cole",
       desc: "Vinil resistente al agua, troquel y brillantes.",
       img: "/mega/etiquetas.png",
     },
@@ -74,7 +74,7 @@ export default function Header({ offsetTop = 0 }: HeaderProps) {
         {/* LOGO (doble tamaño vs. antes) */}
         <Link href="/" className="shrink-0 flex items-center gap-2" aria-label="PapoomArt, volver al inicio">
           <Image
-            src="/logo-papoomart.png"
+            src="/logo.png"
             alt="PapoomArt"
             width={220}   // antes 110 → ahora el doble
             height={64}
