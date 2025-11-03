@@ -51,7 +51,7 @@ export default function Header({ offsetTop = 0 }: HeaderProps) {
       img: "/mega/etiquetas.png",
     },
     {
-      href: "/tienda/detalles-personalizados"",
+      href: "/tienda/detalles-personalizados",
       title: "Detalles personalizados",
       desc: "Tazas, tomatodos y cajitas para regalar.",
       img: "/mega/detalles.png",
