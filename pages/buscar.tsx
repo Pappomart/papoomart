@@ -6,24 +6,38 @@ import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { listProducts } from "@/lib/shop";
 
+// Hacemos el tipo flexible para no depender de "tags"
+type AnyProduct = ReturnType<typeof listProducts>[number] & {
+  tags?: string[]; // opcional
+};
+
 export default function BuscarPage() {
   const router = useRouter();
   const q = (router.query.q as string | undefined)?.trim() ?? "";
 
   const products = useMemo(() => {
-    const all = listProducts();
-    if (!q) return all; // si no hay query, muestra todo
+    const all = listProducts() as AnyProduct[];
+    if (!q) return all;
+
     const needle = q.toLowerCase();
-    return all.filter((p) =>
-      [
-        p.name?.toLowerCase(),
-        p.short?.toLowerCase(),
-        p.description?.toLowerCase(),
-        ...(Array.isArray(p.tags) ? p.tags.map((t: string) => t.toLowerCase()) : []),
-      ]
+
+    return all.filter((p) => {
+      const base = [
+        p.name?.toLowerCase?.(),
+        (p as any).short?.toLowerCase?.(),
+        (p as any).description?.toLowerCase?.(),
+      ];
+
+      // Si el producto trae "tags", los usamos; si no, lista vacía
+      const tags =
+        Array.isArray((p as any).tags)
+          ? ((p as any).tags as string[]).map((t) => String(t).toLowerCase())
+          : [];
+
+      return [...base, ...tags]
         .filter(Boolean)
-        .some((field) => (field as string).includes(needle))
-    );
+        .some((field) => (field as string).includes(needle));
+    });
   }, [q]);
 
   return (
@@ -41,7 +55,8 @@ export default function BuscarPage() {
           <h1 className="text-2xl md:text-3xl font-bold">
             Resultados {q ? `para “${q}”` : "de búsqueda"}
           </h1>
-          {/* buscador arriba también, por comodidad */}
+
+          {/* buscador superior */}
           <form action="/buscar" method="GET" className="relative w-full max-w-md">
             <input
               type="search"
@@ -76,21 +91,23 @@ export default function BuscarPage() {
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
             {products.map((p) => (
-              <Link key={p.id} href={`/producto/${p.id}`} className="card overflow-hidden group">
+              <Link key={(p as any).id} href={`/producto/${(p as any).id}`} className="card overflow-hidden group">
                 <div className="relative aspect-[4/3]">
                   <Image
-                    src={p.image}
-                    alt={p.name}
+                    src={(p as any).image}
+                    alt={(p as any).name}
                     fill
                     className="object-cover transition-transform group-hover:scale-105"
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="font-medium">{p.name}</h3>
-                  {typeof p.price === "number" && (
-                    <p className="text-gray-500 mt-1">S/ {p.price.toFixed(2)}</p>
+                  <h3 className="font-medium">{(p as any).name}</h3>
+                  {typeof (p as any).price === "number" && (
+                    <p className="text-gray-500 mt-1">S/ {(p as any).price.toFixed(2)}</p>
                   )}
-                  {p.short && <p className="text-sm text-gray-500 mt-2">{p.short}</p>}
+                  {(p as any).short && (
+                    <p className="text-sm text-gray-500 mt-2">{(p as any).short}</p>
+                  )}
                 </div>
               </Link>
             ))}

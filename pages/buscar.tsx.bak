@@ -1,72 +1,101 @@
-// pages/blog.tsx
+// pages/buscar.tsx
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
-import type { GetStaticProps } from "next";
-import { getAllPosts, type Post } from "@/lib/blog";
+import { useRouter } from "next/router";
+import { useMemo } from "react";
+import { listProducts } from "@/lib/shop";
 
-const SITE = "https://papoomart.vercel.app";
+export default function BuscarPage() {
+  const router = useRouter();
+  const q = (router.query.q as string | undefined)?.trim() ?? "";
 
-export const getStaticProps: GetStaticProps = async () => {
-  const posts = getAllPosts();
-  return { props: { posts } };
-};
-
-export default function BlogIndex({ posts }: { posts: Post[] }) {
-  const canonical = `${SITE}/blog`;
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Blog",
-    name: "PapoomArt — Blog",
-    url: canonical,
-    blogPost: posts.map((p) => ({
-      "@type": "BlogPosting",
-      headline: p.title,
-      datePublished: p.date,
-      description: p.excerpt,
-      url: `${SITE}/blog/${p.slug}`,
-    })),
-  };
+  const products = useMemo(() => {
+    const all = listProducts();
+    if (!q) return all; // si no hay query, muestra todo
+    const needle = q.toLowerCase();
+    return all.filter((p) =>
+      [
+        p.name?.toLowerCase(),
+        p.short?.toLowerCase(),
+        p.description?.toLowerCase(),
+        ...(Array.isArray(p.tags) ? p.tags.map((t: string) => t.toLowerCase()) : []),
+      ]
+        .filter(Boolean)
+        .some((field) => (field as string).includes(needle))
+    );
+  }, [q]);
 
   return (
     <>
       <Head>
-        <title>Blog — PapoomArt</title>
+        <title>Buscar: {q || "todo"} — PapoomArt</title>
         <meta
           name="description"
-          content="Ideas, guías y materiales para tus stickers, etiquetas y detalles personalizados."
+          content={`Resultados de búsqueda para "${q || "todo"}" en PapoomArt`}
         />
-        <link rel="canonical" href={canonical} />
-        <meta property="og:title" content="Blog — PapoomArt" />
-        <meta property="og:description" content="Ideas, guías y materiales para tus stickers, etiquetas y detalles personalizados." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={canonical} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </Head>
 
-      <main className="container mt-10">
-        <header className="max-w-3xl">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Blog</h1>
-          <p className="text-gray-600 mt-2">
-            Inspiración, consejos y mejores prácticas para personalizar tus detalles.
-          </p>
-        </header>
+      <main className="container py-8">
+        <div className="flex items-end justify-between gap-4">
+          <h1 className="text-2xl md:text-3xl font-bold">
+            Resultados {q ? `para “${q}”` : "de búsqueda"}
+          </h1>
+          {/* buscador arriba también, por comodidad */}
+          <form action="/buscar" method="GET" className="relative w-full max-w-md">
+            <input
+              type="search"
+              name="q"
+              defaultValue={q}
+              placeholder="Buscar productos…"
+              className="w-full rounded-md border border-gray-300 pl-3 pr-10 py-2 outline-none focus:ring-2 focus:ring-pink-400"
+            />
+            <button
+              type="submit"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              aria-label="Buscar"
+            >
+              🔎
+            </button>
+          </form>
+        </div>
 
-        <section className="grid md:grid-cols-2 gap-6 mt-8">
-          {posts.map((p) => (
-            <Link key={p.slug} href={`/blog/${p.slug}`} className="card p-5 hover:shadow-lg transition">
-              <span className="inline-block text-xs font-semibold text-pink-600 bg-pink-50 px-2 py-1 rounded">
-                {p.tag}
-              </span>
-              <h2 className="text-xl font-semibold mt-2">{p.title}</h2>
-              <p className="text-gray-600 mt-2">{p.excerpt}</p>
-              <p className="text-gray-400 text-sm mt-3">
-                {new Date(p.date).toLocaleDateString("es-PE", { year: "numeric", month: "long", day: "numeric" })}
-              </p>
-              <span className="mt-3 inline-block text-pink-600 font-semibold">Leer más →</span>
-            </Link>
-          ))}
-        </section>
+        <p className="text-gray-500 mt-2">
+          {products.length} resultado{products.length === 1 ? "" : "s"}
+          {q ? ` para “${q}”` : ""}.
+        </p>
+
+        {products.length === 0 ? (
+          <div className="mt-10 text-gray-600">
+            <p>No encontramos coincidencias.</p>
+            <ul className="list-disc ml-5 mt-2">
+              <li>Prueba con palabras más generales (ej. “stickers”, “libretas”).</li>
+              <li>Revisa la ortografía.</li>
+            </ul>
+          </div>
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            {products.map((p) => (
+              <Link key={p.id} href={`/producto/${p.id}`} className="card overflow-hidden group">
+                <div className="relative aspect-[4/3]">
+                  <Image
+                    src={p.image}
+                    alt={p.name}
+                    fill
+                    className="object-cover transition-transform group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="font-medium">{p.name}</h3>
+                  {typeof p.price === "number" && (
+                    <p className="text-gray-500 mt-1">S/ {p.price.toFixed(2)}</p>
+                  )}
+                  {p.short && <p className="text-sm text-gray-500 mt-2">{p.short}</p>}
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </main>
     </>
   );
