@@ -6,10 +6,16 @@ import { useState } from "react";
 import { FaBars, FaTimes, FaSearch, FaChevronDown, FaChevronRight } from "react-icons/fa";
 
 export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
+  // Menú móvil
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [submenuOpen, setSubmenuOpen] = useState(false); // submenu Tienda en móvil
-  const [celebrarOpen, setCelebrarOpen] = useState(false); // sub-submenu celebrar en móvil
-  const [escolarOpen, setEscolarOpen] = useState(false); // sub-submenu escolares en móvil
+  const [submenuOpen, setSubmenuOpen] = useState(false);     // Tienda en móvil
+  const [celebrarOpen, setCelebrarOpen] = useState(false);   // sub-submenu celebrar móvil
+  const [escolarOpen, setEscolarOpen] = useState(false);     // sub-submenu escolares móvil
+
+  // Menú desktop controlado por estado (evita perder foco al mover el mouse)
+  const [openMain, setOpenMain] = useState(false);           // dropdown "Tienda"
+  const [openCelebrar, setOpenCelebrar] = useState(false);   // flyout celebrar
+  const [openEscolares, setOpenEscolares] = useState(false); // flyout escolares
 
   return (
     <header
@@ -17,7 +23,7 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
       style={{ top: offsetTop }}
     >
       <div className="mx-auto max-w-7xl h-20 px-4 md:px-8 flex items-center justify-between">
-        {/* LOGO */}
+        {/* LOGO → Home */}
         <Link href="/" aria-label="PapoomArt, ir al inicio" className="flex items-center gap-3">
           <Image
             src="/logo.png"
@@ -35,88 +41,126 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
             Bienvenidos
           </Link>
 
-          {/* TIENDA dropdown (desktop) */}
-          <div className="relative group">
+          {/* ===== TIENDA (desktop) – controlado por estado, sin perder foco ===== */}
+          <div
+            className="relative"
+            onMouseEnter={() => setOpenMain(true)}
+            onMouseLeave={() => {
+              setOpenMain(false);
+              setOpenCelebrar(false);
+              setOpenEscolares(false);
+            }}
+          >
             <button
-              className="inline-flex items-center gap-1 hover:text-pink-600 transition-colors focus:outline-none"
               type="button"
+              className="inline-flex items-center gap-1 hover:text-pink-600 transition-colors focus:outline-none"
               aria-haspopup="true"
-              aria-expanded="false"
+              aria-expanded={openMain}
+              onClick={() => setOpenMain((v) => !v)} // también abre con click
             >
               Tienda <FaChevronDown className="text-xs mt-0.5" />
             </button>
 
-            {/* Contenedor del dropdown principal */}
-            <div className="absolute left-0 top-full mt-2 w-[320px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg opacity-0 pointer-events-none transition group-hover:opacity-100 group-hover:pointer-events-auto">
-              {/* Etiquetas para celebrar (ya existente con dos opciones) */}
-              <div className="relative group/celebrar">
-                <Link
-                  href="/tienda/celebrar"
-                  className="flex items-center justify-between rounded-md px-3 py-2 hover:bg-pink-50 transition"
-                >
-                  <span>Etiquetas para celebrar</span>
-                  <FaChevronRight className="text-xs opacity-70" />
-                </Link>
-
-                {/* Flyout celebrar */}
-                <div className="absolute top-0 left-[100%] ml-2 w-[280px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg opacity-0 pointer-events-none transition group-hover/celebrar:opacity-100 group-hover/celebrar:pointer-events-auto">
-                  <Link
-                    href="/tienda/celebrar/packs"
-                    className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
-                  >
-                    🎉 Packs de cumpleaños personalizados
-                  </Link>
-                  <Link
-                    href="/tienda/celebrar/elige"
-                    className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
-                  >
-                    🏷️ Elige tus etiquetas
-                  </Link>
-                </div>
-              </div>
-
-              {/* Etiquetas y sellos escolares (NUEVO flyout) */}
-              <div className="relative group/escolares mt-1">
-                <Link
-                  href="/tienda/escolares"
-                  className="flex items-center justify-between rounded-md px-3 py-2 hover:bg-pink-50 transition"
-                >
-                  <span>Etiquetas y sellos escolares</span>
-                  <FaChevronRight className="text-xs opacity-70" />
-                </Link>
-
-                {/* Flyout escolares */}
-                <div className="absolute top-0 left-[100%] ml-2 w-[280px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg opacity-0 pointer-events-none transition group-hover/escolares:opacity-100 group-hover/escolares:pointer-events-auto">
-                  <Link
-                    href="/tienda/escolares/packs"
-                    className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
-                  >
-                    📚 Packs escolares
-                  </Link>
-                  <Link
-                    href="/tienda/escolares/elige"
-                    className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
-                  >
-                    🧷 Elige tus etiquetas escolares
-                  </Link>
-                </div>
-              </div>
-
-              {/* Regalos personalizados */}
-              <Link
-                href="/detalles"
-                className="block rounded-md px-3 py-2 hover:bg-pink-50 transition mt-1"
+            {/* Dropdown principal */}
+            {openMain && (
+              <div
+                className="absolute left-0 top-full mt-2 w-[320px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-[60]"
+                // mantener abierto si el puntero está sobre el panel:
+                onMouseEnter={() => setOpenMain(true)}
+                onMouseLeave={() => {
+                  setOpenMain(false);
+                  setOpenCelebrar(false);
+                  setOpenEscolares(false);
+                }}
               >
-                Regalos personalizados
-              </Link>
-            </div>
+                {/* Etiquetas para celebrar con flyout */}
+                <div
+                  className="relative"
+                  onMouseEnter={() => setOpenCelebrar(true)}
+                  onMouseLeave={() => setOpenCelebrar(false)}
+                >
+                  <Link
+                    href="/etiquetas/celebrar"
+                    className="flex items-center justify-between rounded-md px-3 py-2 hover:bg-pink-50 transition"
+                  >
+                    <span>Etiquetas para celebrar</span>
+                    <FaChevronRight className="text-xs opacity-70" />
+                  </Link>
+
+                  {openCelebrar && (
+                    <div
+                      className="absolute top-0 left-[100%] ml-2 w-[280px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-[70]"
+                      onMouseEnter={() => setOpenCelebrar(true)}
+                      onMouseLeave={() => setOpenCelebrar(false)}
+                    >
+                      <Link
+                        href="/etiquetas/celebrar/packs"
+                        className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
+                      >
+                        🎉 Packs de cumpleaños personalizados
+                      </Link>
+                      <Link
+                        href="/etiquetas/celebrar/elige"
+                        className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
+                      >
+                        🏷️ Elige tus etiquetas
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                {/* Etiquetas y sellos escolares con flyout */}
+                <div
+                  className="relative mt-1"
+                  onMouseEnter={() => setOpenEscolares(true)}
+                  onMouseLeave={() => setOpenEscolares(false)}
+                >
+                  <Link
+                    href="/etiquetas/escolares"
+                    className="flex items-center justify-between rounded-md px-3 py-2 hover:bg-pink-50 transition"
+                  >
+                    <span>Etiquetas y sellos escolares</span>
+                    <FaChevronRight className="text-xs opacity-70" />
+                  </Link>
+
+                  {openEscolares && (
+                    <div
+                      className="absolute top-0 left-[100%] ml-2 w-[280px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-[70]"
+                      onMouseEnter={() => setOpenEscolares(true)}
+                      onMouseLeave={() => setOpenEscolares(false)}
+                    >
+                      <Link
+                        href="/etiquetas/escolares/packs"
+                        className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
+                      >
+                        📚 Packs escolares
+                      </Link>
+                      <Link
+                        href="/etiquetas/escolares/elige"
+                        className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
+                      >
+                        🧷 Elige tus etiquetas escolares
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                {/* Regalos personalizados */}
+                <Link
+                  href="/detalles"
+                  className="block rounded-md px-3 py-2 hover:bg-pink-50 transition mt-1"
+                >
+                  Regalos personalizados
+                </Link>
+              </div>
+            )}
           </div>
 
           <Link href="/promociones" className="hover:text-pink-600 transition-colors">
             Promociones
           </Link>
 
-          {/* Buscador simple */}
+          {/* Buscador */}
           <form action="/buscar" method="GET" className="relative">
             <input
               name="q"
@@ -162,10 +206,9 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                 />
               </button>
 
-              {/* Subopciones de Tienda */}
               {submenuOpen && (
                 <div className="pl-3">
-                  {/* Celebrar (sub-submenu) */}
+                  {/* Celebrar */}
                   <button
                     className="w-full text-left flex justify-between items-center py-2 hover:text-pink-600"
                     onClick={() => setCelebrarOpen(!celebrarOpen)}
@@ -177,16 +220,16 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                   </button>
                   {celebrarOpen && (
                     <div className="pl-3 pb-2 flex flex-col gap-1">
-                      <Link href="/tienda/celebrar/packs" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
+                      <Link href="/etiquetas/celebrar/packs" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
                         🎉 Packs de cumpleaños personalizados
                       </Link>
-                      <Link href="/tienda/celebrar/elige" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
+                      <Link href="/etiquetas/celebrar/elige" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
                         🏷️ Elige tus etiquetas
                       </Link>
                     </div>
                   )}
 
-                  {/* Escolares (sub-submenu NUEVO) */}
+                  {/* Escolares */}
                   <button
                     className="w-full text-left flex justify-between items-center py-2 hover:text-pink-600"
                     onClick={() => setEscolarOpen(!escolarOpen)}
@@ -198,10 +241,10 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                   </button>
                   {escolarOpen && (
                     <div className="pl-3 pb-2 flex flex-col gap-1">
-                      <Link href="/tienda/escolares/packs" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
+                      <Link href="/etiquetas/escolares/packs" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
                         📚 Packs escolares
                       </Link>
-                      <Link href="/tienda/escolares/elige" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
+                      <Link href="/etiquetas/escolares/elige" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
                         🧷 Elige tus etiquetas escolares
                       </Link>
                     </div>
@@ -222,7 +265,7 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
               Promociones
             </Link>
 
-            {/* Buscador móvil (opcional) */}
+            {/* Buscador móvil */}
             <form action="/buscar" method="GET" className="relative mt-3">
               <input
                 name="q"
