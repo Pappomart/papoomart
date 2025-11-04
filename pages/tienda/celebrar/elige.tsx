@@ -54,7 +54,7 @@ export default function EligeEtiquetas() {
         </div>
 
         <div className="mt-10">
-          <Link href="/etiquetas/celebrar" className="text-teal-600 hover:underline">
+          <Link href="/" className="text-teal-600 hover:underline">
             ← Volver
           </Link>
         </div>

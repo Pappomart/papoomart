@@ -115,7 +115,7 @@ export default function EligeEscolares() {
         </div>
 
         <div className="mt-10">
-          <Link href="/tienda/escolares" className="text-teal-600 hover:underline">
+          <Link href="/" className="text-teal-600 hover:underline">
             ← Volver
           </Link>
         </div>
