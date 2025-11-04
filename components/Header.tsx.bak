@@ -139,7 +139,7 @@ export default function Header({ offsetTop = 0 }: Props) {
 
                 {/* Otras categorías */}
                 <Link
-                  href="/tienda/escolar"
+                  href="/tienda/etiquetas-cole"
                   className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
                 >
                   Etiquetas y sellos escolares
@@ -241,14 +241,14 @@ export default function Header({ offsetTop = 0 }: Props) {
                     {celebrarOpen && (
                       <div id="m-sub-cele" className="pl-4 flex flex-col">
                         <Link
-                          href="/etiquetas/celebrar/packs"
+                          href="/tienda/celebrar/packs"
                           onClick={() => setMobileOpen(false)}
                           className="py-2 text-sm hover:text-pink-600"
                         >
                           🎉 Packs de cumpleaños personalizados
                         </Link>
                         <Link
-                          href="/etiquetas/celebrar/elige"
+                          href="/tienda/celebrar/elige"
                           onClick={() => setMobileOpen(false)}
                           className="py-2 text-sm hover:text-pink-600"
                         >
@@ -260,21 +260,21 @@ export default function Header({ offsetTop = 0 }: Props) {
 
                   {/* Otras categorías */}
                   <Link
-                    href="/etiquetas/escolar"
+                    href="/tienda/etiquetas-cole"
                     onClick={() => setMobileOpen(false)}
                     className="block py-2 hover:text-pink-600"
                   >
                     Etiquetas y sellos escolares
                   </Link>
                   <Link
-                    href="/detalles"
+                    href="/tienda/detalles"
                     onClick={() => setMobileOpen(false)}
                     className="block py-2 hover:text-pink-600"
                   >
                     Detalles personalizados
                   </Link>
                   <Link
-                    href="/corporativo"
+                    href="/tienda/corporativo"
                     onClick={() => setMobileOpen(false)}
                     className="block py-2 hover:text-pink-600"
                   >
