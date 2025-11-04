@@ -7,7 +7,7 @@ import { FaBars, FaTimes, FaSearch, FaChevronDown, FaChevronRight } from "react-
 
 const CLOSE_DELAY = 150; // ms
 
-export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
+export default function Header() {
   // Mobile
   const [mobileOpen, setMobileOpen] = useState(false);
   const [submenuOpen, setSubmenuOpen] = useState(false);
@@ -35,6 +35,7 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
     if (ref) clearTimer(ref);
     setter(true);
   };
+
   const closeDelayed = (
     setter: (v: boolean) => void,
     ref: React.MutableRefObject<number | null>,
@@ -47,7 +48,6 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
     }, delay) as unknown as number;
   };
 
-  // Cierre de todo el árbol
   const closeAllDelayed = () => {
     closeDelayed(setOpenCelebrar, celebrarTimer);
     closeDelayed(setOpenEscolares, escolaresTimer);
@@ -55,10 +55,7 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
   };
 
   return (
-    <header
-      className="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200"
-      style={{ top: offsetTop }}
-    >
+    <header className="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200">
       <div className="mx-auto max-w-7xl h-20 px-4 md:px-8 flex items-center justify-between">
         {/* LOGO → Home */}
         <Link href="/" aria-label="PapoomArt, ir al inicio" className="flex items-center gap-3">
@@ -68,7 +65,8 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
             width={240}
             height={90}
             priority
-            className="h-18 w-auto md:h-20"
+            // 150% del tamaño anterior (aprox 72px/84px)
+            className="h-[72px] w-auto md:h-[84px]"
           />
         </Link>
 
@@ -122,7 +120,7 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                       onMouseEnter={() => openNow(setOpenCelebrar, celebrarTimer)}
                       onMouseLeave={() => closeDelayed(setOpenCelebrar, celebrarTimer)}
                     >
-                      {/* Puente invisible para cubrir cualquier “gap” */}
+                      {/* Puente invisible para cubrir cualquier gap */}
                       <div
                         className="absolute -left-4 top-0 h-full w-4"
                         aria-hidden
@@ -207,6 +205,17 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
 
           <Link href="/promociones" className="hover:text-pink-600 transition-colors">
             Promociones
+          </Link>
+
+          {/* Nuevos links desktop */}
+          <Link href="/blog" className="hover:text-pink-600 transition-colors">
+            Blog
+          </Link>
+          <Link href="/club" className="hover:text-pink-600 transition-colors">
+            Club PapoomArt
+          </Link>
+          <Link href="/politicas" className="hover:text-pink-600 transition-colors">
+            Políticas y condiciones
           </Link>
 
           {/* Buscador */}
