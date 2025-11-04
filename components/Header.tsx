@@ -193,6 +193,14 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                 >
                   Regalos personalizados
                 </Link>
+				
+				{/* Corporativo */}
+                <Link
+                  href="/tienda/corporativo"
+                  className="block rounded-md px-3 py-2 hover:bg-pink-50 transition mt-1"
+                >
+                  Papoom corporativo
+                </Link>
               </div>
             )}
           </div>

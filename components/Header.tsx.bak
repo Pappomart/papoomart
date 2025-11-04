@@ -63,13 +63,13 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
         {/* LOGO → Home */}
         <Link href="/" aria-label="PapoomArt, ir al inicio" className="flex items-center gap-3">
           <Image
-            src="/logo.png"
-            alt="PapoomArt"
-            width={240}
-            height={90}
-            priority
-            className="h-12 w-auto md:h-14"
-          />
+			  src="/logo.png"
+			  alt="PapoomArt"
+			  width={240}
+			  height={90}
+			  priority
+			  className="h-18 w-auto md:h-20"
+			/>
         </Link>
 
         {/* NAV DESKTOP */}
