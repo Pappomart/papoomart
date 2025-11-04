@@ -207,7 +207,6 @@ export default function Home() {
               <h4 className="text-xl font-semibold text-teal-800 mb-4">Sobre PapoomArt</h4>
               <ul className="space-y-2 text-gray-700">
                 <li><a href="/sobre" className="hover:underline">Nuestra historia</a></li>
-                <li><a href="/agentes" className="hover:underline">Buscamos Agente</a></li>
                 <li><a href="/blog" className="hover:underline">Blog</a></li>
                 <li><a href="/club" className="hover:underline">Club PapoomArt</a></li>
               </ul>

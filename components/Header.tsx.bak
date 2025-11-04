@@ -109,7 +109,7 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                   onMouseLeave={() => closeDelayed(setOpenCelebrar, celebrarTimer)}
                 >
                   <Link
-                    href="/etiquetas/celebrar"
+                    href="/tienda/celebrar"
                     className="flex items-center justify-between rounded-md px-3 py-2 hover:bg-pink-50 transition"
                   >
                     <span>Etiquetas para celebrar</span>
@@ -129,13 +129,13 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                         onMouseEnter={() => openNow(setOpenCelebrar, celebrarTimer)}
                       />
                       <Link
-                        href="/etiquetas/celebrar/packs"
+                        href="/tienda/celebrar/packs"
                         className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
                       >
                         🎉 Packs de cumpleaños personalizados
                       </Link>
                       <Link
-                        href="/etiquetas/celebrar/elige"
+                        href="/tienda/celebrar/elige"
                         className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
                       >
                         🏷️ Elige tus etiquetas
@@ -151,7 +151,7 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                   onMouseLeave={() => closeDelayed(setOpenEscolares, escolaresTimer)}
                 >
                   <Link
-                    href="/etiquetas/escolares"
+                    href="/tienda/escolares"
                     className="flex items-center justify-between rounded-md px-3 py-2 hover:bg-pink-50 transition"
                   >
                     <span>Etiquetas y sellos escolares</span>
@@ -171,13 +171,13 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                         onMouseEnter={() => openNow(setOpenEscolares, escolaresTimer)}
                       />
                       <Link
-                        href="/etiquetas/escolares/packs"
+                        href="/tienda/escolares/packs"
                         className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
                       >
                         📚 Packs escolares
                       </Link>
                       <Link
-                        href="/etiquetas/escolares/elige"
+                        href="/tienda/escolares/elige"
                         className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
                       >
                         🧷 Elige tus etiquetas escolares
@@ -188,7 +188,7 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
 
                 {/* Regalos personalizados */}
                 <Link
-                  href="/detalles"
+                  href="/tienda/detalles-personalizados"
                   className="block rounded-md px-3 py-2 hover:bg-pink-50 transition mt-1"
                 >
                   Regalos personalizados
@@ -261,10 +261,10 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                   </button>
                   {celebrarOpenM && (
                     <div className="pl-3 pb-2 flex flex-col gap-1">
-                      <Link href="/etiquetas/celebrar/packs" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
+                      <Link href="/tienda/celebrar/packs" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
                         🎉 Packs de cumpleaños personalizados
                       </Link>
-                      <Link href="/etiquetas/celebrar/elige" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
+                      <Link href="/tienda/celebrar/elige" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
                         🏷️ Elige tus etiquetas
                       </Link>
                     </div>
@@ -282,16 +282,16 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                   </button>
                   {escolarOpenM && (
                     <div className="pl-3 pb-2 flex flex-col gap-1">
-                      <Link href="/etiquetas/escolares/packs" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
+                      <Link href="/tienda/escolares/packs" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
                         📚 Packs escolares
                       </Link>
-                      <Link href="/etiquetas/escolares/elige" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
+                      <Link href="/tienda/escolares/elige" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
                         🧷 Elige tus etiquetas escolares
                       </Link>
                     </div>
                   )}
 
-                  <Link href="/detalles" onClick={() => setMobileOpen(false)} className="py-2 hover:text-pink-600">
+                  <Link href="/tienda/detalles-personalizados" onClick={() => setMobileOpen(false)} className="py-2 hover:text-pink-600">
                     Regalos personalizados
                   </Link>
                 </div>

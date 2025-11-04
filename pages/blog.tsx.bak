@@ -1,0 +1,85 @@
+// pages/blog.tsx
+import Head from "next/head";
+import Link from "next/link";
+
+const posts = [
+  {
+    slug: "como-elegir-etiquetas-perfectas",
+    title: "Cómo elegir las etiquetas perfectas para tu fiesta 🎉",
+    excerpt:
+      "Tamaños, materiales y tips rápidos para que todo combine con tu temática.",
+    tag: "Guías",
+  },
+  {
+    slug: "vinil-vs-papel-fotografico",
+    title: "Vinil vs. papel fotográfico: ¿qué conviene y cuándo?",
+    excerpt:
+      "Te contamos las diferencias para stickers resistentes y usos cotidianos.",
+    tag: "Materiales",
+  },
+  {
+    slug: "ideas-para-detalles-personalizados",
+    title: "7 ideas de detalles personalizados que siempre sorprenden",
+    excerpt:
+      "Pequeños detalles, gran impacto. Nuestra selección favorita para inspirarte.",
+    tag: "Inspírate",
+  },
+];
+
+export default function Blog() {
+  const title = "Blog — PapoomArt";
+  const desc =
+    "Consejos, guías y tendencias de papelería creativa, etiquetas y regalos personalizados.";
+
+  return (
+    <>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={desc} />
+        <link rel="canonical" href="https://papoomart.vercel.app/blog" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={desc} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://papoomart.vercel.app/blog" />
+      </Head>
+
+      <main className="container mt-10">
+        <header className="max-w-3xl">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Blog</h1>
+          <p className="mt-3 text-gray-600">
+            Ideas que inspiran, guías que ayudan y tips que hacen tu vida más fácil.
+          </p>
+        </header>
+
+        <section className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {posts.map((p) => (
+            <article key={p.slug} className="card p-5 flex flex-col">
+              <span className="text-xs font-semibold text-pink-600 bg-pink-50 px-2 py-1 rounded w-fit">
+                {p.tag}
+              </span>
+              <h2 className="mt-3 text-lg font-semibold">{p.title}</h2>
+              <p className="mt-2 text-gray-600 flex-1">{p.excerpt}</p>
+              <Link
+                href={`/blog/${p.slug}`}
+                className="mt-4 inline-flex items-center gap-2 text-pink-600 hover:underline"
+              >
+                Leer artículo →
+              </Link>
+            </article>
+          ))}
+        </section>
+
+        {/* CTA */}
+        <div className="card p-6 md:p-10 text-center mt-12">
+          <h3 className="text-xl font-semibold">¿Quieres recibir ideas y promos?</h3>
+          <p className="text-gray-600 mt-2">
+            Súmate al Club PapoomArt y entérate antes que nadie.
+          </p>
+          <Link href="/club" className="btn btn-primary mt-4 inline-block">
+            Unirme al Club
+          </Link>
+        </div>
+      </main>
+    </>
+  );
+}
