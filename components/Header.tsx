@@ -63,13 +63,13 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
         {/* LOGO → Home */}
         <Link href="/" aria-label="PapoomArt, ir al inicio" className="flex items-center gap-3">
           <Image
-			  src="/logo.png"
-			  alt="PapoomArt"
-			  width={240}
-			  height={90}
-			  priority
-			  className="h-18 w-auto md:h-20"
-			/>
+            src="/logo.png"
+            alt="PapoomArt"
+            width={240}
+            height={90}
+            priority
+            className="h-18 w-auto md:h-20"
+          />
         </Link>
 
         {/* NAV DESKTOP */}
@@ -193,8 +193,8 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                 >
                   Regalos personalizados
                 </Link>
-				
-				{/* Corporativo */}
+
+                {/* Corporativo */}
                 <Link
                   href="/tienda/corporativo"
                   className="block rounded-md px-3 py-2 hover:bg-pink-50 transition mt-1"
@@ -207,6 +207,17 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
 
           <Link href="/promociones" className="hover:text-pink-600 transition-colors">
             Promociones
+          </Link>
+
+          {/* NUEVOS LINKS */}
+          <Link href="/blog" className="hover:text-pink-600 transition-colors">
+            Blog
+          </Link>
+          <Link href="/club" className="hover:text-pink-600 transition-colors">
+            Club PapoomArt
+          </Link>
+          <Link href="/politicas" className="hover:text-pink-600 transition-colors">
+            Políticas y condiciones
           </Link>
 
           {/* Buscador */}
@@ -302,6 +313,9 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                   <Link href="/tienda/detalles-personalizados" onClick={() => setMobileOpen(false)} className="py-2 hover:text-pink-600">
                     Regalos personalizados
                   </Link>
+                  <Link href="/tienda/corporativo" onClick={() => setMobileOpen(false)} className="py-2 hover:text-pink-600">
+                    Papoom corporativo
+                  </Link>
                 </div>
               )}
             </div>
@@ -312,6 +326,17 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
               className="py-2 hover:text-pink-600 transition-colors"
             >
               Promociones
+            </Link>
+
+            {/* Nuevos links en móvil */}
+            <Link href="/blog" onClick={() => setMobileOpen(false)} className="py-2 hover:text-pink-600">
+              Blog
+            </Link>
+            <Link href="/club" onClick={() => setMobileOpen(false)} className="py-2 hover:text-pink-600">
+              Club PapoomArt
+            </Link>
+            <Link href="/politicas" onClick={() => setMobileOpen(false)} className="py-2 hover:text-pink-600">
+              Políticas y condiciones
             </Link>
 
             {/* Buscador móvil */}

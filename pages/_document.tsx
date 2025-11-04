@@ -5,12 +5,12 @@ export default function Document() {
     <Html lang="es">
       <Head>
         {/* ✅ Favicon */}
-        <link rel="icon" href="/favicon.ico" />
-        {/* Si es PNG, usa esta línea en cambio: */}
-        {/* <link rel="icon" type="image/png" href="/favicon.png" /> */}
-        
+        <link rel="icon" href="/public/favicon.ico" />
+		<link rel="manifest" href="/public/site.webmanifest" />
+		<link rel="apple-touch-icon" href="/public/apple-touch-icon.png" />
+		<meta name="theme-color" content="#ff6fae" />
+	
         {/* (Opcional) Colores y meta adicionales */}
-        <meta name="theme-color" content="#F47C6C" />
         <meta name="application-name" content="PapoomArt" />
       </Head>
       <body>
