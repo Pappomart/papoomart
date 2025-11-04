@@ -2,20 +2,57 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FaBars, FaTimes, FaSearch, FaChevronDown, FaChevronRight } from "react-icons/fa";
 
-export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
-  // Menú móvil
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [submenuOpen, setSubmenuOpen] = useState(false);     // Tienda en móvil
-  const [celebrarOpen, setCelebrarOpen] = useState(false);   // sub-submenu celebrar móvil
-  const [escolarOpen, setEscolarOpen] = useState(false);     // sub-submenu escolares móvil
+const CLOSE_DELAY = 150; // ms
 
-  // Menú desktop controlado por estado (evita perder foco al mover el mouse)
-  const [openMain, setOpenMain] = useState(false);           // dropdown "Tienda"
-  const [openCelebrar, setOpenCelebrar] = useState(false);   // flyout celebrar
-  const [openEscolares, setOpenEscolares] = useState(false); // flyout escolares
+export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
+  // Mobile
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [submenuOpen, setSubmenuOpen] = useState(false);
+  const [celebrarOpenM, setCelebrarOpenM] = useState(false);
+  const [escolarOpenM, setEscolarOpenM] = useState(false);
+
+  // Desktop states
+  const [openMain, setOpenMain] = useState(false);
+  const [openCelebrar, setOpenCelebrar] = useState(false);
+  const [openEscolares, setOpenEscolares] = useState(false);
+
+  // Timers
+  const mainTimer = useRef<number | null>(null);
+  const celebrarTimer = useRef<number | null>(null);
+  const escolaresTimer = useRef<number | null>(null);
+
+  const clearTimer = (ref: React.MutableRefObject<number | null>) => {
+    if (ref.current) {
+      window.clearTimeout(ref.current);
+      ref.current = null;
+    }
+  };
+
+  const openNow = (setter: (v: boolean) => void, ref?: React.MutableRefObject<number | null>) => {
+    if (ref) clearTimer(ref);
+    setter(true);
+  };
+  const closeDelayed = (
+    setter: (v: boolean) => void,
+    ref: React.MutableRefObject<number | null>,
+    delay = CLOSE_DELAY
+  ) => {
+    clearTimer(ref);
+    ref.current = window.setTimeout(() => {
+      setter(false);
+      ref.current = null;
+    }, delay) as unknown as number;
+  };
+
+  // Cierre de todo el árbol
+  const closeAllDelayed = () => {
+    closeDelayed(setOpenCelebrar, celebrarTimer);
+    closeDelayed(setOpenEscolares, escolaresTimer);
+    closeDelayed(setOpenMain, mainTimer);
+  };
 
   return (
     <header
@@ -41,43 +78,35 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
             Bienvenidos
           </Link>
 
-          {/* ===== TIENDA (desktop) – controlado por estado, sin perder foco ===== */}
+          {/* ===== TIENDA (desktop) ===== */}
           <div
             className="relative"
-            onMouseEnter={() => setOpenMain(true)}
-            onMouseLeave={() => {
-              setOpenMain(false);
-              setOpenCelebrar(false);
-              setOpenEscolares(false);
-            }}
+            onMouseEnter={() => openNow(setOpenMain, mainTimer)}
+            onMouseLeave={closeAllDelayed}
           >
             <button
               type="button"
               className="inline-flex items-center gap-1 hover:text-pink-600 transition-colors focus:outline-none"
               aria-haspopup="true"
               aria-expanded={openMain}
-              onClick={() => setOpenMain((v) => !v)} // también abre con click
+              onClick={() => setOpenMain((v) => !v)}
+              onFocus={() => openNow(setOpenMain, mainTimer)}
+              onBlur={() => closeDelayed(setOpenMain, mainTimer)}
             >
               Tienda <FaChevronDown className="text-xs mt-0.5" />
             </button>
 
-            {/* Dropdown principal */}
             {openMain && (
               <div
                 className="absolute left-0 top-full mt-2 w-[320px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-[60]"
-                // mantener abierto si el puntero está sobre el panel:
-                onMouseEnter={() => setOpenMain(true)}
-                onMouseLeave={() => {
-                  setOpenMain(false);
-                  setOpenCelebrar(false);
-                  setOpenEscolares(false);
-                }}
+                onMouseEnter={() => openNow(setOpenMain, mainTimer)}
+                onMouseLeave={closeAllDelayed}
               >
-                {/* Etiquetas para celebrar con flyout */}
+                {/* Celebrar con flyout */}
                 <div
                   className="relative"
-                  onMouseEnter={() => setOpenCelebrar(true)}
-                  onMouseLeave={() => setOpenCelebrar(false)}
+                  onMouseEnter={() => openNow(setOpenCelebrar, celebrarTimer)}
+                  onMouseLeave={() => closeDelayed(setOpenCelebrar, celebrarTimer)}
                 >
                   <Link
                     href="/etiquetas/celebrar"
@@ -89,10 +118,16 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
 
                   {openCelebrar && (
                     <div
-                      className="absolute top-0 left-[100%] ml-2 w-[280px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-[70]"
-                      onMouseEnter={() => setOpenCelebrar(true)}
-                      onMouseLeave={() => setOpenCelebrar(false)}
+                      className="absolute top-0 left-full w-[280px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-[70]"
+                      onMouseEnter={() => openNow(setOpenCelebrar, celebrarTimer)}
+                      onMouseLeave={() => closeDelayed(setOpenCelebrar, celebrarTimer)}
                     >
+                      {/* Puente invisible para cubrir cualquier “gap” */}
+                      <div
+                        className="absolute -left-4 top-0 h-full w-4"
+                        aria-hidden
+                        onMouseEnter={() => openNow(setOpenCelebrar, celebrarTimer)}
+                      />
                       <Link
                         href="/etiquetas/celebrar/packs"
                         className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
@@ -109,11 +144,11 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                   )}
                 </div>
 
-                {/* Etiquetas y sellos escolares con flyout */}
+                {/* Escolares con flyout */}
                 <div
                   className="relative mt-1"
-                  onMouseEnter={() => setOpenEscolares(true)}
-                  onMouseLeave={() => setOpenEscolares(false)}
+                  onMouseEnter={() => openNow(setOpenEscolares, escolaresTimer)}
+                  onMouseLeave={() => closeDelayed(setOpenEscolares, escolaresTimer)}
                 >
                   <Link
                     href="/etiquetas/escolares"
@@ -125,10 +160,16 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
 
                   {openEscolares && (
                     <div
-                      className="absolute top-0 left-[100%] ml-2 w-[280px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-[70]"
-                      onMouseEnter={() => setOpenEscolares(true)}
-                      onMouseLeave={() => setOpenEscolares(false)}
+                      className="absolute top-0 left-full w-[280px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-[70]"
+                      onMouseEnter={() => openNow(setOpenEscolares, escolaresTimer)}
+                      onMouseLeave={() => closeDelayed(setOpenEscolares, escolaresTimer)}
                     >
+                      {/* Puente invisible */}
+                      <div
+                        className="absolute -left-4 top-0 h-full w-4"
+                        aria-hidden
+                        onMouseEnter={() => openNow(setOpenEscolares, escolaresTimer)}
+                      />
                       <Link
                         href="/etiquetas/escolares/packs"
                         className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
@@ -211,14 +252,14 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                   {/* Celebrar */}
                   <button
                     className="w-full text-left flex justify-between items-center py-2 hover:text-pink-600"
-                    onClick={() => setCelebrarOpen(!celebrarOpen)}
+                    onClick={() => setCelebrarOpenM(!celebrarOpenM)}
                   >
                     Etiquetas para celebrar
                     <FaChevronDown
-                      className={`text-xs transition-transform ${celebrarOpen ? "rotate-180" : ""}`}
+                      className={`text-xs transition-transform ${celebrarOpenM ? "rotate-180" : ""}`}
                     />
                   </button>
-                  {celebrarOpen && (
+                  {celebrarOpenM && (
                     <div className="pl-3 pb-2 flex flex-col gap-1">
                       <Link href="/etiquetas/celebrar/packs" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
                         🎉 Packs de cumpleaños personalizados
@@ -232,14 +273,14 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
                   {/* Escolares */}
                   <button
                     className="w-full text-left flex justify-between items-center py-2 hover:text-pink-600"
-                    onClick={() => setEscolarOpen(!escolarOpen)}
+                    onClick={() => setEscolarOpenM(!escolarOpenM)}
                   >
                     Etiquetas y sellos escolares
                     <FaChevronDown
-                      className={`text-xs transition-transform ${escolarOpen ? "rotate-180" : ""}`}
+                      className={`text-xs transition-transform ${escolarOpenM ? "rotate-180" : ""}`}
                     />
                   </button>
-                  {escolarOpen && (
+                  {escolarOpenM && (
                     <div className="pl-3 pb-2 flex flex-col gap-1">
                       <Link href="/etiquetas/escolares/packs" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
                         📚 Packs escolares
