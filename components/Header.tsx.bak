@@ -65,10 +65,10 @@ export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
           <Image
             src="/logo.png"
             alt="PapoomArt"
-            width={360}
-            height={135}
+            width={240}
+            height={90}
             priority
-            className="h-18 w-auto md:h-21"
+            className="h-12 w-auto md:h-14"
           />
         </Link>
 
