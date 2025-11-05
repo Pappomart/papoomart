@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import "@/styles/globals.css";
 import { useState, useCallback } from "react";
+import { useRouter } from "next/router";
 import { FaTimes } from "react-icons/fa";
 import Header from "@/components/Header";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -12,9 +13,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const [showBanner, setShowBanner] = useState(true);
   const hideBanner = useCallback(() => setShowBanner(false), []);
 
+  // ⚙️ Marca (ajustado a dominio final)
   const BRAND = {
     name: "PapoomArt",
-    site: "https://papoomart.vercel.app",
+    site: "https://papoomart.com",                 // <— tu dominio
     email: "papoomartperu@gmail.com",
     phoneHuman: "+51 997 374 878",
     phoneE164: "+51997374878",
@@ -34,33 +36,48 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     ogImage: "/og.jpg",
   };
 
+  // Canonical dinámico
+  const router = useRouter();
+  const path = router.asPath.split("#")[0]; // sin hash
+  const canonical = `${BRAND.site}${path === "/" ? "" : path}`;
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <Head>
+        {/* Básicos */}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#ffffff" />
         <title>{BRAND.title}</title>
         <meta name="description" content={BRAND.description} />
+        <meta name="robots" content="index,follow,max-image-preview:large" />
+        <link rel="canonical" href={canonical} />
 
-        {/* OG & Twitter */}
+        {/* Idiomas (raíz en es-PE; copia genérica es) */}
+        <link rel="alternate" hrefLang="es-PE" href={canonical} />
+        <link rel="alternate" hrefLang="es" href={canonical} />
+        <link rel="alternate" hrefLang="x-default" href={canonical} />
+
+        {/* OpenGraph & Twitter */}
         <meta property="og:site_name" content={BRAND.name} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={BRAND.site} />
+        <meta property="og:url" content={canonical} />
         <meta property="og:title" content={BRAND.title} />
         <meta property="og:description" content={BRAND.description} />
         <meta property="og:image" content={BRAND.ogImage} />
+        <meta property="og:locale" content="es_PE" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={BRAND.title} />
         <meta name="twitter:description" content={BRAND.description} />
         <meta name="twitter:image" content={BRAND.ogImage} />
+        <meta name="twitter:site" content="@PapoomArt" />
 
-        {/* Icons */}
+        {/* Iconos */}
         <link rel="icon" href="/favicon.ico" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
 
-        {/* Schema.org */}
+        {/* JSON-LD: Organization */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -70,6 +87,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
               name: BRAND.name,
               url: BRAND.site,
               email: BRAND.email,
+              logo: `${BRAND.site}/logo.png`,
               contactPoint: [
                 {
                   "@type": "ContactPoint",
@@ -80,6 +98,23 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 },
               ],
               sameAs: Object.values(BRAND.social),
+            }),
+          }}
+        />
+        {/* JSON-LD: WebSite + SearchAction */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              url: BRAND.site,
+              name: BRAND.name,
+              potentialAction: {
+                "@type": "SearchAction",
+                target: `${BRAND.site}/buscar?q={search_term_string}`,
+                "query-input": "required name=search_term_string",
+              },
             }),
           }}
         />
@@ -96,7 +131,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
             <div className="flex items-center justify-center gap-2">
               <a
-                href={BRAND.social.whatsapp}
+                href={`${BRAND.social.whatsapp}?text=${encodeURIComponent(
+                  "Hola PapoomArt 👋 Quiero información de envíos y pedidos personalizados."
+                )}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center bg-white text-[#F47C6C] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-pink-50 transition-colors"
@@ -123,7 +160,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         </div>
       )}
 
-      {/* 🧭 Header fijo (ocupa el top; si el banner se cierra, el header sube sin dejar hueco) */}
+      {/* 🧭 Header fijo */}
       <Header />
 
       {/* Contenido */}
