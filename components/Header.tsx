@@ -55,7 +55,7 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200">
+    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200">
       <div className="mx-auto max-w-7xl h-20 px-4 md:px-8 flex items-center justify-between">
         {/* LOGO → Home */}
         <Link href="/" aria-label="PapoomArt, ir al inicio" className="flex items-center gap-3">

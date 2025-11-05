@@ -207,17 +207,6 @@ export default function Header() {
             Promociones
           </Link>
 
-          {/* Nuevos links desktop */}
-          <Link href="/blog" className="hover:text-pink-600 transition-colors">
-            Blog
-          </Link>
-          <Link href="/club" className="hover:text-pink-600 transition-colors">
-            Club PapoomArt
-          </Link>
-          <Link href="/politicas" className="hover:text-pink-600 transition-colors">
-            Políticas y condiciones
-          </Link>
-
           {/* Buscador */}
           <form action="/buscar" method="GET" className="relative">
             <input

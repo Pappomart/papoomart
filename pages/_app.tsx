@@ -125,8 +125,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
       {/* 🧭 Header fijo (ocupa el top; si el banner se cierra, el header sube sin dejar hueco) */}
       <Header />
-      {/* Espaciador solo para la altura del header fijo */}
-      <div className="h-20" />
 
       {/* Contenido */}
       <main className="mx-auto max-w-7xl px-4 md:px-8">
