@@ -2,38 +2,15 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import "@/styles/globals.css";
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { FaTimes } from "react-icons/fa";
 import Header from "@/components/Header";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  // Banner (se puede cerrar; reaparece al refrescar)
   const [showBanner, setShowBanner] = useState(true);
   const hideBanner = useCallback(() => setShowBanner(false), []);
 
-  // Altura real del banner para empujar el header hacia abajo
-  const bannerRef = useRef<HTMLDivElement | null>(null);
-  const [bannerH, setBannerH] = useState(0);
-
-  useEffect(() => {
-    const el = bannerRef.current;
-    if (!el) return;
-
-    const update = () => setBannerH(showBanner ? el.getBoundingClientRect().height : 0);
-    update();
-
-    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(update) : null;
-    ro?.observe(el);
-    window.addEventListener("resize", update);
-
-    return () => {
-      ro?.disconnect();
-      window.removeEventListener("resize", update);
-    };
-  }, [showBanner]);
-
-  // ---- SEO + redes ----
   const BRAND = {
     name: "PapoomArt",
     site: "https://papoomart.vercel.app",
@@ -55,7 +32,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       "Etiquetas, sellos y regalos personalizados hechos en Perú. Envíos express y atención por WhatsApp.",
     ogImage: "/og.jpg",
   };
-  // ----------------------
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
@@ -64,6 +40,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="theme-color" content="#ffffff" />
         <title>{BRAND.title}</title>
         <meta name="description" content={BRAND.description} />
+
+        {/* OG & Twitter */}
         <meta property="og:site_name" content={BRAND.name} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={BRAND.site} />
@@ -74,15 +52,14 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="twitter:title" content={BRAND.title} />
         <meta name="twitter:description" content={BRAND.description} />
         <meta name="twitter:image" content={BRAND.ogImage} />
-        <meta name="twitter:site" content="@PapoomArt" />
-		
-		<link rel="icon" href="/public/favicon.ico" />	
-		<link rel="shortcut icon" href="/public/favicon.ico" />
-		<link rel="apple-touch-icon" href="/public/apple-touch-icon.png" />
-		<link rel="manifest" href="/site.webmanifest" />
-		<meta name="theme-color" content="#ffffff" />
 
-        {/* JSON-LD Organization + sameAs */}
+        {/* Icons */}
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+
+        {/* Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -101,59 +78,40 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                   availableLanguage: ["es-PE", "es", "en"],
                 },
               ],
-              sameAs: [
-                BRAND.social.instagram,
-                BRAND.social.facebook,
-                BRAND.social.tiktok,
-                BRAND.social.youtube,
-                BRAND.social.pinterest,
-                BRAND.social.x,
-                BRAND.social.threads,
-              ],
+              sameAs: Object.values(BRAND.social),
             }),
           }}
         />
       </Head>
 
-      {/* 🔔 Banner superior — no tapa el header */}
+      {/* 🔔 Banner */}
       {showBanner && (
-        <div
-          ref={bannerRef}
-          aria-label="Información de envíos"
-          className="relative bg-[#F47C6C] text-white text-center text-xs sm:text-sm py-2 px-4 font-medium z-[60]"
-        >
+        <div className="relative bg-[#F47C6C] text-white text-center text-xs sm:text-sm py-2 px-4 font-medium z-[60]">
           <div className="mx-auto max-w-7xl flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <p className="m-0 leading-tight">
               <strong>Envíos gratis</strong> por compras mayores a <strong>S/. 120</strong>.{" "}
-              <strong>Envíos express en 24h</strong> (consultar precios por inbox).
+              <strong>Envíos express en 24h</strong>.
             </p>
 
             <div className="flex items-center justify-center gap-2">
-              {/* Teléfono → WhatsApp */}
               <a
-                href={`${BRAND.social.whatsapp}?text=Hola%20PapoomArt!%20Quiero%20informaci%C3%B3n%20sobre%20env%C3%ADos%20y%20pedidos%20personalizados.`}
+                href={`${BRAND.social.whatsapp}`}
                 target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center bg-white text-[#F47C6C] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-pink-50 transition-colors"
+                className="bg-white text-[#F47C6C] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-pink-50"
               >
                 {BRAND.phoneHuman}
               </a>
 
-              {/* Correo */}
               <a
                 href={`mailto:${BRAND.email}`}
-                className="inline-flex items-center justify-center bg-white text-[#F47C6C] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-pink-50 transition-colors"
+                className="bg-white text-[#F47C6C] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-pink-50"
               >
                 {BRAND.email}
               </a>
 
-              {/* Cerrar banner */}
               <button
-                type="button"
                 onClick={hideBanner}
-                className="inline-flex items-center justify-center rounded-md bg-white/10 hover:bg-white/20 px-2 py-1 text-white"
-                aria-label="Ocultar aviso"
-                title="Ocultar"
+                className="bg-white/10 hover:bg-white/20 px-2 py-1 text-white rounded-md"
               >
                 <FaTimes />
               </button>
@@ -162,21 +120,18 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         </div>
       )}
 
-      {/* 🧭 Header fijo desplazado por la altura del banner */}
-      <Header offsetTop={bannerH} />
+      {/* ✅ Header sin props */}
+      <Header />
 
-      {/* Espaciador por header fijo */}
-      <div className="h-[8rem] md:h-[9rem]" />
+      {/* ✅ Espacio para header fijo */}
+      <div className="h-20" />
 
-      {/* Contenido */}
       <main className="mx-auto max-w-7xl px-4 md:px-8">
         <Component {...pageProps} />
       </main>
 
-      {/* Botón flotante WhatsApp */}
       <WhatsAppButton />
 
-      {/* Footer */}
       <footer className="border-t bg-white mt-16">
         <div className="mx-auto max-w-7xl px-4 md:px-8 py-8 text-xs sm:text-sm text-gray-600">
           © {new Date().getFullYear()} {BRAND.name} · Lima, Perú

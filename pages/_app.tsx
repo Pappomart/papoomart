@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  // Banner: SIEMPRE aparece al cargar; solo se oculta si el usuario pulsa “X”
   const [showBanner, setShowBanner] = useState(true);
   const hideBanner = useCallback(() => setShowBanner(false), []);
 
@@ -59,7 +60,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
 
-        {/* Schema */}
+        {/* Schema.org */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -84,34 +85,36 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         />
       </Head>
 
-      {/* 🔔 Banner */}
+      {/* 🔔 Banner superior — aparece siempre, se oculta solo si el usuario lo cierra */}
       {showBanner && (
         <div className="relative bg-[#F47C6C] text-white text-center text-xs sm:text-sm py-2 px-4 font-medium z-[60]">
           <div className="mx-auto max-w-7xl flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <p className="m-0 leading-tight">
               <strong>Envíos gratis</strong> por compras mayores a <strong>S/. 120</strong>.{" "}
-              <strong>Envíos express en 24h</strong>.
+              <strong>Envíos express en 24h</strong> (consultar precios por inbox).
             </p>
 
             <div className="flex items-center justify-center gap-2">
               <a
-                href={`${BRAND.social.whatsapp}`}
+                href={BRAND.social.whatsapp}
                 target="_blank"
-                className="bg-white text-[#F47C6C] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-pink-50"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center bg-white text-[#F47C6C] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-pink-50 transition-colors"
               >
                 {BRAND.phoneHuman}
               </a>
-
               <a
                 href={`mailto:${BRAND.email}`}
-                className="bg-white text-[#F47C6C] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-pink-50"
+                className="inline-flex items-center justify-center bg-white text-[#F47C6C] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-pink-50 transition-colors"
               >
                 {BRAND.email}
               </a>
-
               <button
+                type="button"
                 onClick={hideBanner}
-                className="bg-white/10 hover:bg-white/20 px-2 py-1 text-white rounded-md"
+                className="inline-flex items-center justify-center rounded-md bg-white/10 hover:bg-white/20 px-2 py-1 text-white"
+                aria-label="Ocultar aviso"
+                title="Ocultar"
               >
                 <FaTimes />
               </button>
@@ -120,18 +123,20 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         </div>
       )}
 
-      {/* ✅ Header sin props */}
+      {/* 🧭 Header fijo (ocupa el top; si el banner se cierra, el header sube sin dejar hueco) */}
       <Header />
-
-      {/* ✅ Espacio para header fijo */}
+      {/* Espaciador solo para la altura del header fijo */}
       <div className="h-20" />
 
+      {/* Contenido */}
       <main className="mx-auto max-w-7xl px-4 md:px-8">
         <Component {...pageProps} />
       </main>
 
+      {/* Botón flotante WhatsApp */}
       <WhatsAppButton />
 
+      {/* Footer */}
       <footer className="border-t bg-white mt-16">
         <div className="mx-auto max-w-7xl px-4 md:px-8 py-8 text-xs sm:text-sm text-gray-600">
           © {new Date().getFullYear()} {BRAND.name} · Lima, Perú
