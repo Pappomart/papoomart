@@ -1,28 +1,21 @@
+// components/Header.tsx
 "use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { FaBars, FaTimes, FaSearch, FaChevronDown, FaChevronRight } from "react-icons/fa";
+import { FaBars, FaTimes, FaChevronDown, FaChevronRight, FaSearch } from "react-icons/fa";
 
-const CLOSE_DELAY = 150; // ms
+const CLOSE_DELAY = 150;
 
-export default function Header() {
-  // Mobile
+export default function Header({ offsetTop = 0 }: { offsetTop?: number }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [submenuOpen, setSubmenuOpen] = useState(false);
-  const [celebrarOpenM, setCelebrarOpenM] = useState(false);
-  const [escolarOpenM, setEscolarOpenM] = useState(false);
-
-  // Desktop states
   const [openMain, setOpenMain] = useState(false);
-  const [openCelebrar, setOpenCelebrar] = useState(false);
-  const [openEscolares, setOpenEscolares] = useState(false);
+  const [openProgramas, setOpenProgramas] = useState(false);
+  const [openAyudar, setOpenAyudar] = useState(false);
 
-  // Timers
   const mainTimer = useRef<number | null>(null);
-  const celebrarTimer = useRef<number | null>(null);
-  const escolaresTimer = useRef<number | null>(null);
+  const progTimer = useRef<number | null>(null);
+  const ayudarTimer = useRef<number | null>(null);
 
   const clearTimer = (ref: React.MutableRefObject<number | null>) => {
     if (ref.current) {
@@ -30,196 +23,96 @@ export default function Header() {
       ref.current = null;
     }
   };
-
-  const openNow = (setter: (v: boolean) => void, ref?: React.MutableRefObject<number | null>) => {
+  const openNow = (setter: (v:boolean)=>void, ref?: React.MutableRefObject<number | null>) => {
     if (ref) clearTimer(ref);
     setter(true);
   };
-
-  const closeDelayed = (
-    setter: (v: boolean) => void,
-    ref: React.MutableRefObject<number | null>,
-    delay = CLOSE_DELAY
-  ) => {
+  const closeDelayed = (setter:(v:boolean)=>void, ref:React.MutableRefObject<number|null>, delay=CLOSE_DELAY) => {
     clearTimer(ref);
-    ref.current = window.setTimeout(() => {
-      setter(false);
-      ref.current = null;
-    }, delay) as unknown as number;
-  };
-
-  const closeAllDelayed = () => {
-    closeDelayed(setOpenCelebrar, celebrarTimer);
-    closeDelayed(setOpenEscolares, escolaresTimer);
-    closeDelayed(setOpenMain, mainTimer);
+    ref.current = window.setTimeout(()=>{ setter(false); ref.current=null; }, delay) as unknown as number;
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200">
+    <header
+      className="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200"
+      style={{ top: offsetTop }}
+    >
       <div className="mx-auto max-w-7xl h-20 px-4 md:px-8 flex items-center justify-between">
-        {/* LOGO → Home */}
-        <Link href="/" aria-label="PapoomArt, ir al inicio" className="flex items-center gap-3">
-          <Image
-            src="/logo.png"
-            alt="PapoomArt"
-            width={240}
-            height={90}
-            priority
-            // 150% del tamaño anterior (aprox 72px/84px)
-            className="h-[72px] w-auto md:h-[84px]"
-          />
+        <Link href="/" className="flex items-center gap-3" aria-label="DonaSonrisas, inicio">
+          <Image src="/logo.png" alt="DonaSonrisas" width={210} height={70} priority className="h-14 w-auto" />
         </Link>
 
-        {/* NAV DESKTOP */}
+        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6 text-gray-800 text-base font-medium">
-          <Link href="/sobre" className="hover:text-pink-600 transition-colors">
-            Bienvenidos
-          </Link>
+          <Link href="/#nosotros" className="hover:text-pink-600">Quiénes somos</Link>
 
-          {/* ===== TIENDA (desktop) ===== */}
+          {/* Programas */}
           <div
             className="relative"
             onMouseEnter={() => openNow(setOpenMain, mainTimer)}
-            onMouseLeave={closeAllDelayed}
+            onMouseLeave={() => closeDelayed(setOpenMain, mainTimer)}
           >
             <button
-              type="button"
-              className="inline-flex items-center gap-1 hover:text-pink-600 transition-colors focus:outline-none"
-              aria-haspopup="true"
-              aria-expanded={openMain}
+              className="inline-flex items-center gap-1 hover:text-pink-600"
               onClick={() => setOpenMain((v) => !v)}
-              onFocus={() => openNow(setOpenMain, mainTimer)}
-              onBlur={() => closeDelayed(setOpenMain, mainTimer)}
             >
-              Tienda <FaChevronDown className="text-xs mt-0.5" />
+              Programas <FaChevronDown className="text-xs mt-0.5" />
             </button>
-
             {openMain && (
               <div
                 className="absolute left-0 top-full mt-2 w-[320px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-[60]"
                 onMouseEnter={() => openNow(setOpenMain, mainTimer)}
-                onMouseLeave={closeAllDelayed}
+                onMouseLeave={() => closeDelayed(setOpenMain, mainTimer)}
               >
-                {/* Celebrar con flyout */}
-                <div
-                  className="relative"
-                  onMouseEnter={() => openNow(setOpenCelebrar, celebrarTimer)}
-                  onMouseLeave={() => closeDelayed(setOpenCelebrar, celebrarTimer)}
-                >
-                  <Link
-                    href="/tienda/celebrar"
-                    className="flex items-center justify-between rounded-md px-3 py-2 hover:bg-pink-50 transition"
-                  >
-                    <span>Etiquetas para celebrar</span>
-                    <FaChevronRight className="text-xs opacity-70" />
-                  </Link>
-
-                  {openCelebrar && (
-                    <div
-                      className="absolute top-0 left-full w-[280px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-[70]"
-                      onMouseEnter={() => openNow(setOpenCelebrar, celebrarTimer)}
-                      onMouseLeave={() => closeDelayed(setOpenCelebrar, celebrarTimer)}
-                    >
-                      {/* Puente invisible para cubrir cualquier gap */}
-                      <div
-                        className="absolute -left-4 top-0 h-full w-4"
-                        aria-hidden
-                        onMouseEnter={() => openNow(setOpenCelebrar, celebrarTimer)}
-                      />
-                      <Link
-                        href="/tienda/celebrar/packs"
-                        className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
-                      >
-                        🎉 Packs de cumpleaños personalizados
-                      </Link>
-                      <Link
-                        href="/tienda/celebrar/elige"
-                        className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
-                      >
-                        🏷️ Elige tus etiquetas
-                      </Link>
-                    </div>
-                  )}
-                </div>
-
-                {/* Escolares con flyout */}
-                <div
-                  className="relative mt-1"
-                  onMouseEnter={() => openNow(setOpenEscolares, escolaresTimer)}
-                  onMouseLeave={() => closeDelayed(setOpenEscolares, escolaresTimer)}
-                >
-                  <Link
-                    href="/tienda/escolares"
-                    className="flex items-center justify-between rounded-md px-3 py-2 hover:bg-pink-50 transition"
-                  >
-                    <span>Etiquetas y sellos escolares</span>
-                    <FaChevronRight className="text-xs opacity-70" />
-                  </Link>
-
-                  {openEscolares && (
-                    <div
-                      className="absolute top-0 left-full w-[280px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-[70]"
-                      onMouseEnter={() => openNow(setOpenEscolares, escolaresTimer)}
-                      onMouseLeave={() => closeDelayed(setOpenEscolares, escolaresTimer)}
-                    >
-                      {/* Puente invisible */}
-                      <div
-                        className="absolute -left-4 top-0 h-full w-4"
-                        aria-hidden
-                        onMouseEnter={() => openNow(setOpenEscolares, escolaresTimer)}
-                      />
-                      <Link
-                        href="/tienda/escolares/packs"
-                        className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
-                      >
-                        📚 Packs escolares
-                      </Link>
-                      <Link
-                        href="/tienda/escolares/elige"
-                        className="block rounded-md px-3 py-2 hover:bg-pink-50 transition"
-                      >
-                        🧷 Elige tus etiquetas escolares
-                      </Link>
-                    </div>
-                  )}
-                </div>
-
-                {/* Regalos personalizados */}
-                <Link
-                  href="/tienda/detalles-personalizados"
-                  className="block rounded-md px-3 py-2 hover:bg-pink-50 transition mt-1"
-                >
-                  Regalos personalizados
-                </Link>
-
-                {/* Corporativo */}
-                <Link
-                  href="/tienda/corporativo"
-                  className="block rounded-md px-3 py-2 hover:bg-pink-50 transition mt-1"
-                >
-                  Papoom corporativo
-                </Link>
+                <Link href="/programas/ninez" className="block rounded-md px-3 py-2 hover:bg-pink-50">Niñez</Link>
+                <Link href="/programas/educacion" className="block rounded-md px-3 py-2 hover:bg-pink-50">Educación</Link>
+                <Link href="/programas/salud" className="block rounded-md px-3 py-2 hover:bg-pink-50">Salud</Link>
+                <Link href="/programas/emergencias" className="block rounded-md px-3 py-2 hover:bg-pink-50">Emergencias</Link>
               </div>
             )}
           </div>
 
-          <Link href="/promociones" className="hover:text-pink-600 transition-colors">
-            Promociones
-          </Link>
+          {/* Cómo ayudar */}
+          <div
+            className="relative"
+            onMouseEnter={() => openNow(setOpenAyudar, ayudarTimer)}
+            onMouseLeave={() => closeDelayed(setOpenAyudar, ayudarTimer)}
+          >
+            <button className="inline-flex items-center gap-1 hover:text-pink-600">
+              Cómo ayudar <FaChevronDown className="text-xs mt-0.5" />
+            </button>
+            {openAyudar && (
+              <div
+                className="absolute left-0 top-full mt-2 w-[320px] rounded-xl border border-gray-200 bg-white p-2 shadow-lg z-[60]"
+                onMouseEnter={() => openNow(setOpenAyudar, ayudarTimer)}
+                onMouseLeave={() => closeDelayed(setOpenAyudar, ayudarTimer)}
+              >
+                <Link href="/donar" className="block rounded-md px-3 py-2 hover:bg-pink-50">Donar</Link>
+                <Link href="/#apadrinar" className="block rounded-md px-3 py-2 hover:bg-pink-50">Apadrinar</Link>
+                <Link href="/#voluntariado" className="block rounded-md px-3 py-2 hover:bg-pink-50">Voluntariado</Link>
+                <Link href="/#empresas" className="block rounded-md px-3 py-2 hover:bg-pink-50">Empresas</Link>
+              </div>
+            )}
+          </div>
 
-          {/* Buscador */}
+          <Link href="/transparencia" className="hover:text-pink-600">Transparencia</Link>
+          <Link href="/blog" className="hover:text-pink-600">Blog</Link>
+          <Link href="/contacto" className="hover:text-pink-600">Contacto</Link>
+
+          <Link href="/donar" className="btn btn-primary !py-2 !px-4">Donar ahora</Link>
+
           <form action="/buscar" method="GET" className="relative">
             <input
               name="q"
               type="search"
-              placeholder="Buscar productos..."
-              className="w-64 rounded-full border border-gray-300 pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-pink-400"
+              placeholder="Buscar…"
+              className="w-56 rounded-full border border-gray-300 pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-pink-400"
             />
             <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </form>
         </nav>
 
-        {/* BOTÓN MENÚ MÓVIL */}
+        {/* Mobile button */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           className="md:hidden inline-flex items-center justify-center p-2 rounded-md border border-gray-300"
@@ -229,109 +122,22 @@ export default function Header() {
         </button>
       </div>
 
-      {/* PANEL MÓVIL */}
+      {/* Mobile panel */}
       {mobileOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
           <nav className="flex flex-col p-4 text-gray-800">
-            <Link
-              href="/sobre"
-              onClick={() => setMobileOpen(false)}
-              className="py-2 hover:text-pink-600 transition-colors"
-            >
-              Bienvenidos
-            </Link>
+            <Link href="/#nosotros" onClick={()=>setMobileOpen(false)} className="py-2 hover:text-pink-600">Quiénes somos</Link>
+            <Link href="/programas" onClick={()=>setMobileOpen(false)} className="py-2 hover:text-pink-600">Programas</Link>
+            <Link href="/donar" onClick={()=>setMobileOpen(false)} className="py-2 hover:text-pink-600">Cómo ayudar</Link>
+            <Link href="/transparencia" onClick={()=>setMobileOpen(false)} className="py-2 hover:text-pink-600">Transparencia</Link>
+            <Link href="/blog" onClick={()=>setMobileOpen(false)} className="py-2 hover:text-pink-600">Blog</Link>
+            <Link href="/contacto" onClick={()=>setMobileOpen(false)} className="py-2 hover:text-pink-600">Contacto</Link>
 
-            {/* Acordeón Tienda */}
-            <div className="border-t pt-2 mt-2">
-              <button
-                className="w-full text-left flex justify-between items-center py-2 font-medium hover:text-pink-600"
-                onClick={() => setSubmenuOpen(!submenuOpen)}
-              >
-                Tienda
-                <FaChevronDown
-                  className={`text-xs transition-transform ${submenuOpen ? "rotate-180" : ""}`}
-                />
-              </button>
-
-              {submenuOpen && (
-                <div className="pl-3">
-                  {/* Celebrar */}
-                  <button
-                    className="w-full text-left flex justify-between items-center py-2 hover:text-pink-600"
-                    onClick={() => setCelebrarOpenM(!celebrarOpenM)}
-                  >
-                    Etiquetas para celebrar
-                    <FaChevronDown
-                      className={`text-xs transition-transform ${celebrarOpenM ? "rotate-180" : ""}`}
-                    />
-                  </button>
-                  {celebrarOpenM && (
-                    <div className="pl-3 pb-2 flex flex-col gap-1">
-                      <Link href="/tienda/celebrar/packs" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
-                        🎉 Packs de cumpleaños personalizados
-                      </Link>
-                      <Link href="/tienda/celebrar/elige" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
-                        🏷️ Elige tus etiquetas
-                      </Link>
-                    </div>
-                  )}
-
-                  {/* Escolares */}
-                  <button
-                    className="w-full text-left flex justify-between items-center py-2 hover:text-pink-600"
-                    onClick={() => setEscolarOpenM(!escolarOpenM)}
-                  >
-                    Etiquetas y sellos escolares
-                    <FaChevronDown
-                      className={`text-xs transition-transform ${escolarOpenM ? "rotate-180" : ""}`}
-                    />
-                  </button>
-                  {escolarOpenM && (
-                    <div className="pl-3 pb-2 flex flex-col gap-1">
-                      <Link href="/tienda/escolares/packs" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
-                        📚 Packs escolares
-                      </Link>
-                      <Link href="/tienda/escolares/elige" onClick={() => setMobileOpen(false)} className="py-1 text-sm hover:text-pink-600">
-                        🧷 Elige tus etiquetas escolares
-                      </Link>
-                    </div>
-                  )}
-
-                  <Link href="/tienda/detalles-personalizados" onClick={() => setMobileOpen(false)} className="py-2 hover:text-pink-600">
-                    Regalos personalizados
-                  </Link>
-                  <Link href="/tienda/corporativo" onClick={() => setMobileOpen(false)} className="py-2 hover:text-pink-600">
-                    Papoom corporativo
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            <Link
-              href="/promociones"
-              onClick={() => setMobileOpen(false)}
-              className="py-2 hover:text-pink-600 transition-colors"
-            >
-              Promociones
-            </Link>
-
-            {/* Nuevos links en móvil */}
-            <Link href="/blog" onClick={() => setMobileOpen(false)} className="py-2 hover:text-pink-600">
-              Blog
-            </Link>
-            <Link href="/club" onClick={() => setMobileOpen(false)} className="py-2 hover:text-pink-600">
-              Club PapoomArt
-            </Link>
-            <Link href="/politicas" onClick={() => setMobileOpen(false)} className="py-2 hover:text-pink-600">
-              Políticas y condiciones
-            </Link>
-
-            {/* Buscador móvil */}
             <form action="/buscar" method="GET" className="relative mt-3">
               <input
                 name="q"
                 type="search"
-                placeholder="Buscar productos..."
+                placeholder="Buscar…"
                 className="w-full rounded-lg border border-gray-300 pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-pink-400"
               />
               <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />

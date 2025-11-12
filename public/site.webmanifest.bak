@@ -1,17 +1,7 @@
 {
-  "name": "PapoomArt",
-  "short_name": "PapoomArt",
-  "description": "Papelería creativa, etiquetas personalizadas, stickers y detalles hechos con amor ✨",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ff6fae",
+  "name": "Papoom Art",
+  "short_name": "Papoom",
   "icons": [
-    {
-      "src": "/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png"
-    },
     {
       "src": "/icon-192x192.png",
       "sizes": "192x192",
@@ -22,5 +12,9 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/"
 }

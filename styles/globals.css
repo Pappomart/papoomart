@@ -1,39 +1,7 @@
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root { --brand: 32 120 255; }
-.btn { @apply inline-flex items-center justify-center rounded-md px-4 py-2 font-medium hover:opacity-90 transition; }
-.btn-primary { @apply bg-blue-600 text-white; }
-.btn-outline { @apply border border-gray-300 text-gray-800 bg-white; }
-.container { @apply max-w-7xl mx-auto px-4; }
-.card { @apply bg-white rounded-lg shadow-sm border; }
-
-
-/* styles/globals.css */
-
-/* Marquee accesible y estable (mobile-first) */
-@keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.animate-marquee {
-  display: inline-block;
-  animation: marquee 20s linear infinite;
-  will-change: transform;
-}
-@media (min-width: 640px) { /* sm */
-  .animate-marquee { animation-duration: 24s; }
-}
-@media (min-width: 768px) { /* md */
-  .animate-marquee { animation-duration: 28s; }
-}
-
-/* Reduce motion para accesibilidad */
-@media (prefers-reduced-motion: reduce) {
-  .animate-marquee {
-    animation: none !important;
-    transform: none !important;
-  }
-}
+/* cards & buttons rápidas */
+.card{ @apply rounded-xl border border-gray-200 bg-white; }
+.btn{ @apply inline-flex items-center justify-center rounded-md font-semibold px-4 py-2 transition; }
+.btn-primary{ @apply bg-pink-600 text-white hover:opacity-90; }
+.btn-outline{ @apply border border-pink-600 text-pink-600 hover:bg-pink-50; }
+.input{ @apply w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-pink-400; }
+.container{ @apply mx-auto max-w-7xl px-4 md:px-8; }

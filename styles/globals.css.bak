@@ -9,3 +9,31 @@
 .btn-outline { @apply border border-gray-300 text-gray-800 bg-white; }
 .container { @apply max-w-7xl mx-auto px-4; }
 .card { @apply bg-white rounded-lg shadow-sm border; }
+
+
+/* styles/globals.css */
+
+/* Marquee accesible y estable (mobile-first) */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+  will-change: transform;
+}
+@media (min-width: 640px) { /* sm */
+  .animate-marquee { animation-duration: 24s; }
+}
+@media (min-width: 768px) { /* md */
+  .animate-marquee { animation-duration: 28s; }
+}
+
+/* Reduce motion para accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none !important;
+    transform: none !important;
+  }
+}
